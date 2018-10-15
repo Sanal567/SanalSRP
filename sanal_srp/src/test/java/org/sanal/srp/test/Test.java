@@ -1,4 +1,4 @@
-package org.sanal.test;
+package org.sanal.srp.test;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 

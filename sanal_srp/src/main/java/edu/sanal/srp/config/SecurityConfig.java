@@ -1,4 +1,4 @@
-package org.sanal.config;
+package edu.sanal.srp.config;
 
 import javax.sql.DataSource;
 
@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -19,18 +20,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private DataSource dataSource;
 
-/*	@Autowired
-	private PasswordEncoder passwordEncoder;
-*/
 	@Bean
 	PasswordEncoder PasswordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
 
-	/*public PasswordEncoder getPasswordEncoder() {
-		return passwordEncoder;
-	}
-*/
 	@Autowired
 	public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
 
@@ -40,11 +34,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 
 	@Override
+	public void configure(WebSecurity web) throws Exception {
+		web.ignoring().antMatchers("/lib/**", "/images/**", "/open/**", "/global/**", "/fonts/**",
+		"/js/**");
+	}
+
+	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 
-		http.authorizeRequests().antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')").and().formLogin()
-				.loginPage("/login").failureUrl("/login?error").usernameParameter("username")
-				.passwordParameter("password").and().logout().logoutSuccessUrl("/login?logout").and()
+		http.authorizeRequests().antMatchers("/admin/**").hasRole("ADMIN").and().formLogin().loginPage("/login")
+				.failureUrl("/login?error").usernameParameter("username").passwordParameter("password").and().logout()
+				.logoutSuccessUrl("/login?logout").deleteCookies("JSESSIONID").invalidateHttpSession(true).and()
 				.exceptionHandling().accessDeniedPage("/403").and().csrf();
 
 	}

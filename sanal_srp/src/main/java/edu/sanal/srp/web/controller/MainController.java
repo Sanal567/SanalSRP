@@ -1,4 +1,4 @@
-package org.sanal.web.controller;
+package edu.sanal.srp.web.controller;
 
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;

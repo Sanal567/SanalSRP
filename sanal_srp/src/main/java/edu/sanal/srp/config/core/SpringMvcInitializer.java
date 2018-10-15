@@ -1,8 +1,12 @@
-package org.sanal.config.core;
+package edu.sanal.srp.config.core;
 
-import org.sanal.config.AppConfig;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
+import edu.sanal.srp.config.AppConfig;
+
+/**
+ * @author sanal567 Date 14-10-18 3:28 PM 
+ */
 public class SpringMvcInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
 	@Override
