@@ -7,11 +7,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
  */
 public class Test {
 
-	/**
-	 * 
-	 */
 	public Test() {
-		// TODO Auto-generated constructor stub
 	}
 
 	/**

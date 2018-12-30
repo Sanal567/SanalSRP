@@ -20,13 +20,13 @@
 		</script>
 
 		<c:if test="${pageContext.request.userPrincipal.name != null}">
+			<a href="/SanalSRP/admission/admit">Admissions</a>
 			<h2>
 				User : ${pageContext.request.userPrincipal.name} | <a
 					href="javascript:formSubmit()"> Logout</a>
 			</h2>
 		</c:if>
-
-
 	</sec:authorize>
+
 </body>
 </html>
