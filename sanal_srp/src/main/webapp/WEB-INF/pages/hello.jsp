@@ -1,6 +1,9 @@
 <%@taglib prefix="sec"
 	uri="http://www.springframework.org/security/tags"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
+<c:set var="contextPath" value="${pageContext.request.contextPath}" />
+
 <html>
 <body>
 	<h1>Title : ${title}</h1>
@@ -20,7 +23,7 @@
 		</script>
 
 		<c:if test="${pageContext.request.userPrincipal.name != null}">
-			<a href="/SanalSRP/admission/admit">Admissions</a>
+			<a href="${contextPath}/admission/admit">Admissions</a>
 			<h2>
 				User : ${pageContext.request.userPrincipal.name} | <a
 					href="javascript:formSubmit()"> Logout</a>

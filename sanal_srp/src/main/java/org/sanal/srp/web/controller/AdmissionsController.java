@@ -20,45 +20,6 @@ public class AdmissionsController {
 	@Autowired
 	private StudentService studentService;
 
-	@GetMapping("/student/searchStudent")
-	public ModelAndView showSearchForm() {
-		ModelAndView searchStudent = new ModelAndView();
-		searchStudent.addObject("student", new Student());
-		// searchStudent.addV
-		return searchStudent;
-	}
-	
-	@GetMapping("/student/viewStudentDetails")
-	public ModelAndView showStudentDetails(@RequestParam("studentId") Integer studentId) {
-		
-		ModelAndView studentDetails = new ModelAndView();
-		if(studentId!=null && studentId.toString().length()!=0) { 
-		studentDetails.addObject("student", studentService.findById(studentId));
-		}
-		else {
-			System.out.println("studentId is null or it is empty string");
-		}
-		return studentDetails;
-	}
-
-	@PostMapping("/student/searchStudent")
-	public ModelAndView searchResults(@ModelAttribute("student") Student student) {
-		ModelAndView searchResults = new ModelAndView();
-
-		if ((student.getFirstName() != null && student.getFirstName().trim().length() != 0)
-				|| (student.getLastName() != null && student.getLastName().trim().length() != 0))
-		{	
-			searchResults.addObject("studentList", studentService.searchStudents(student));
-			searchResults.setViewName("/student/searchResults");
-			searchResults.addObject("firstName", student.getFirstName());
-			searchResults.addObject("lastName", student.getLastName());
-		}else {
-			searchResults.addObject("error", "Please enter at least one field");
-			searchResults.setViewName("/student/searchStudent");
-		}
-		return searchResults;
-	}
-
 	@GetMapping("/admission/admit")
 	public ModelAndView loadAdmissionHome() {
 		ModelAndView admissions = new ModelAndView();

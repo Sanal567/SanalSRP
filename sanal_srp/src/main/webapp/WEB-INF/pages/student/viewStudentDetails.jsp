@@ -1,6 +1,8 @@
-<%-- <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
- --%><%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
+<c:set var="contextPath" value="${pageContext.request.contextPath}" />
 
 <!DOCTYPE html>
 <html>
@@ -10,7 +12,10 @@
 </head>
 <body>
 
-	Student Details
+	Student Details :
+	<a
+		href="${contextPath}/student/editStudentDetails?studentId=${student.studentId}">Edit
+		details</a>
 	<br /> First Name : ${student.firstName}
 	<br /> Last Name : ${student.lastName}
 	<br /> Gender :
@@ -43,13 +48,16 @@
 	<br /> Mobile No : ${student.pocContactNo}
 	<br /> Relation : ${student.pocRelation}
 
-
-
 	<br /> Student Present Address : ${student.presentAddress}
 	<a
-		href="/SanalSRP/address/editAddress?addressId=?${student.presentAddress.addressId}">Edit</a>
-	<br /> Permanent Address : ${student.permanentAddress }
+		href="${contextPath}/address/editAddress?addressId=?${student.presentAddress.addressId}">Edit</a>
+	<br />Permanent Address : ${student.permanentAddress }
+	<a
+		href="${contextPath}/address/editAddress?addressId=?${student.permanentAddress.addressId}">Edit</a>
+
 	<br /> Commuting From : ${student.commutingFrom }
+	<a
+		href="${contextPath}/address/editAddress?addressId=?${student.commutingFrom.addressId}">Edit</a>
 	<br />
 </body>
 </html>

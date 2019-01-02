@@ -33,11 +33,14 @@ public class Address {
 	@Column(name = "landmark")
 	private String landmark;
 
+	@Column(name="mandal", nullable = false, length = 40)
+	private String mandal;
+	
 	@Column(name = "district", nullable = false, length = 40)
 	private String district;
 
 	@Column(name = "pin_no", nullable = false)
-	private int pinNo;
+	private int pinCode;
 
 	@Column(name = "additional_info")
 	private String additionalInfo;

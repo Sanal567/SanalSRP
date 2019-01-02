@@ -4,11 +4,11 @@
 	xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.mkyong</groupId>
-	<artifactId>Sanal1</artifactId>
+	<groupId>org.sanal</groupId>
+	<artifactId>SanalSRP</artifactId>
 	<packaging>war</packaging>
 	<version>1.0-SNAPSHOT</version>
-	<name>Sanal2</name>
+	<name>SanalSRP</name>
 	<url>sda</url>
 
 	<licenses>
@@ -136,7 +136,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>Sanal3</finalName>
+		<finalName>SanalSRP</finalName>
 		<plugins>
 
 			<plugin>

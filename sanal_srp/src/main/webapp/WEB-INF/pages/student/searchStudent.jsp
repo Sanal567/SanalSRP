@@ -2,6 +2,9 @@
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
+<c:set var="contextPath" value="${pageContext.request.contextPath}"/>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -25,7 +28,7 @@
 		<div class="error">${error}</div>
 	</c:if>
 
-	<form:form method="post" action="/SanalSRP/student/searchStudent"
+	<form:form method="post" action="${contextPath}/student/searchStudent"
 		modelAttribute="student">
 		<label for="FirstName">First Name : </label>
 		<form:input path="FirstName" placeholder="First Name" />

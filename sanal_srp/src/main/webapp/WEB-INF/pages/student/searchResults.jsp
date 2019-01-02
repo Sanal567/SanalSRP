@@ -2,6 +2,9 @@
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+
+<c:set var="contextPath" value="${pageContext.request.contextPath}" />
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -16,7 +19,7 @@
 		<c:when test="${studentList.size()>0}">
 			<c:forEach var="student" items="${studentList}">
 				<a
-					href="/SanalSRP/student/viewStudentDetails?studentId=${student.studentId}">
+					href="${contextPath}/student/viewStudentDetails?studentId=${student.studentId}">
 					${student.firstName}</a> : ${student.lastName}
 			</c:forEach>
 		</c:when>
