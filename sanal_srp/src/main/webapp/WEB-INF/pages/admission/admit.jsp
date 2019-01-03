@@ -17,7 +17,7 @@
 		</c:forEach>
 	</form:select>
 	 --%>
-	<font size='3'><b>9966691989</font>
+	<font size='3'><b>9966691989</b></font>
 	<br />
 	First Name :<form:input path="firstName" size="10" maxlength="20"
 		placeholder="First Name" spellcheck="false" />

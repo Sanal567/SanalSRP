@@ -9,5 +9,6 @@ import org.sanal.srp.entities.Address;
 public interface AddressService {
 
 	public Address getAddress(Integer addressId);
+	public Address save(Address address);
 
 }
