@@ -12,8 +12,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.Range;
-import org.springframework.lang.Nullable;
-
 import lombok.Data;
 
 @Data
