@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * @author Sunil Nalluru Date 3-1-19 12:04 AM
- *
  */
 @Controller
 public class AddressController {
@@ -29,20 +28,19 @@ public class AddressController {
 			editAddress.addAttribute("address", address);
 			return "editAddress";
 		} else {
-			editAddress.addAttribute("error", "Please click a student to view address");
+			editAddress.addAttribute("error", "Invalid URL: Please click a student to view address");
 			return "/home";
 		}
 	}
+	
+//	@Autowired
+//	private AddessValidator addressValidator;  ,BindingResult bindingResult, Error errors  
 
 	@PostMapping("/address/saveAddress")
-	public String saveAddress(Model model, @ModelAttribute("address") Address address) {
-
-		if (address != null) {
+	public String saveAddress(Model model , @ModelAttribute("address") Address address) {	
 			address = addressService.save(address);
 			model.addAttribute("address", address);
 			return "viewAddress";
-		} else
-			return "/address/editAddress";
-	}
+			}
 
 }

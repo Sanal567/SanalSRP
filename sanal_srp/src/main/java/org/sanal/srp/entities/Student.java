@@ -33,7 +33,7 @@ public class Student {
 	private String lastName;
 
 	@Column(name = "student_gender")
-	private String studentGender;
+	private Boolean studentGender;
 
 	@Column(name = "student_dob")
 	private String studentDob;
