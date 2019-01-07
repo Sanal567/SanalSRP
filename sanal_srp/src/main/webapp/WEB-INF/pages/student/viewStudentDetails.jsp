@@ -50,14 +50,14 @@
 
 	<br /> Student Present Address : ${student.presentAddress}
 	<a
-		href="${contextPath}/address/editAddress?addressId=?${student.presentAddress.addressId}">Edit</a>
+		href="${contextPath}/address/editAddress?addressId=${student.presentAddress.addressId}">Edit</a>
 	<br />Permanent Address : ${student.permanentAddress }
 	<a
-		href="${contextPath}/address/editAddress?addressId=?${student.permanentAddress.addressId}">Edit</a>
+		href="${contextPath}/address/editAddress?addressId=${student.permanentAddress.addressId}">Edit</a>
 
 	<br /> Commuting From : ${student.commutingFrom }
 	<a
-		href="${contextPath}/address/editAddress?addressId=?${student.commutingFrom.addressId}">Edit</a>
+		href="${contextPath}/address/editAddress?addressId=${student.commutingFrom.addressId}">Edit</a>
 	<br />
 </body>
 </html>

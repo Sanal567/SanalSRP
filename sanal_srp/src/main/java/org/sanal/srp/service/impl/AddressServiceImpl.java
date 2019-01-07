@@ -2,6 +2,8 @@ package org.sanal.srp.service.impl;
 
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.sanal.srp.entities.Address;
 import org.sanal.srp.repository.AddressRepository;
 import org.sanal.srp.service.AddressService;
@@ -28,7 +30,12 @@ public class AddressServiceImpl implements AddressService {
 	}
 
 	@Override
-	public Address save(Address address) {
+	public Address saveAddress(Address address) {
+		return addressRepository.save(address);
+	}
+
+	@Override
+	public @Valid Address updateAddress(@Valid Address address) {
 		return addressRepository.save(address);
 	}
 

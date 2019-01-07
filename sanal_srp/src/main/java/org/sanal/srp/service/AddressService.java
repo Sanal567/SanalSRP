@@ -1,5 +1,7 @@
 package org.sanal.srp.service;
 
+import javax.validation.Valid;
+
 import org.sanal.srp.entities.Address;
 
 /**
@@ -9,6 +11,7 @@ import org.sanal.srp.entities.Address;
 public interface AddressService {
 
 	public Address getAddress(Integer addressId);
-	public Address save(Address address);
+	public Address saveAddress(Address address);
+	public Address updateAddress(@Valid Address address);
 
 }

@@ -8,10 +8,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.Range;
+
 import lombok.Data;
 
 @Data
@@ -27,30 +30,31 @@ public class Address {
 	@Column(name = "door_or_house_no", length = 50)
 	private String doorOrHouseNo;
 
-	@NotNull
-	@Size(min = 3, max = 50)
+	@NotBlank
+	@Size(min = 3, max = 50, message = "Street/Village name must be between 3 to 50 characters")
 	@Column(name = "street_one", nullable = false, length = 50)
 	private String streetOne;
 
+//	@Size(min = 3, max = 50, message = "Area/Panachayat name must be between 3 to 50 characters")
 	@Column(name = "street_two", length = 50)
 	private String streetTwo;
-
-	@NotNull
-	@Size(min  = 5, max = 50)
+	
+	@NotBlank
+	@Size(min  = 5, max = 50 , message = "Landmark must be between 5 to 50 characters length")
 	@Column(name = "landmark")
 	private String landmark;
 
-	@NotNull
-	@Size(min =5, max = 50)
+	@NotBlank
+	@Size(min =5, max = 50, message = "Mandal name must be between 5 to 50 characters length ")
 	@Column(name = "mandal", nullable = false, length = 50)
 	private String mandal;
 
-	@NotNull
-	@Size(min = 5, max =50)
+	@NotEmpty
+	@Size(min = 5, max =50 , message = "District name must be between 3 to 5 characters length")
 	@Column(name = "district", nullable = false, length = 50)
 	private String district;
 
-	@NotNull
+	@NotNull(message="PIN Code cannot be empty")
 	@Range(min = 500000, max = 699999)
 	@Column(name = "pin_no", nullable = false)
 	private int pinCode;
