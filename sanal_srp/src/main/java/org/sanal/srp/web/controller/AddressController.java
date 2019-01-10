@@ -1,5 +1,7 @@
 package org.sanal.srp.web.controller;
 
+import java.sql.Date;
+
 import javax.validation.Valid;
 
 import org.sanal.srp.entities.Address;
@@ -8,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -52,6 +53,8 @@ public class AddressController {
 		if (bindingResult.hasErrors())
 			return "/address/editAddress";
 		else {
+			address.setLastUpdatedBy(0);
+			address.setLastUpdationDate(new Date(System.currentTimeMillis()));
 			addressService.updateAddress(address);
 			model.addAttribute("address", address);
 			return "viewAddress";

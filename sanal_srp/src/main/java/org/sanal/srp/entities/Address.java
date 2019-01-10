@@ -35,13 +35,14 @@ public class Address {
 	@Column(name = "street_one", nullable = false, length = 50)
 	private String streetOne;
 
+	
 //	@Size(min = 3, max = 50, message = "Area/Panachayat name must be between 3 to 50 characters")
 	@Column(name = "street_two", length = 50)
 	private String streetTwo;
 	
-	@NotBlank
-	@Size(min  = 5, max = 50 , message = "Landmark must be between 5 to 50 characters length")
-	@Column(name = "landmark")
+//	@NotBlank
+//	@Size(min  = 5, max = 50 , message = "Landmark must be between 5 to 50 characters length")
+	@Column(name = "landmark", length =50)
 	private String landmark;
 
 	@NotBlank
@@ -49,7 +50,7 @@ public class Address {
 	@Column(name = "mandal", nullable = false, length = 50)
 	private String mandal;
 
-	@NotEmpty
+	@NotBlank
 	@Size(min = 5, max =50 , message = "District name must be between 3 to 5 characters length")
 	@Column(name = "district", nullable = false, length = 50)
 	private String district;

@@ -23,9 +23,8 @@
 					${student.firstName}</a> : ${student.lastName}
 			</c:forEach>
 		</c:when>
-		<c:otherwise>
-No student found for <c:if
-				test="${firstName != '' and firstName != null}">First Name : ${firstName}</c:if>
+		<c:otherwise>No student found for
+				<c:if test="${firstName != '' and firstName != null}">First Name : ${firstName}</c:if>
 			<c:if test="${lastName ne '' and lastName ne null}">Last Name : ${lastName}</c:if>
 		</c:otherwise>
 	</c:choose>
