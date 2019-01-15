@@ -130,7 +130,19 @@
 			<artifactId>postgresql</artifactId>
 			<version>42.2.5</version>
 		</dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>net.andreinc.jbvext</groupId> -->
+<!-- 			<artifactId>jbve</artifactId> -->
+<!-- 			<version>0.0.10</version> -->
+<!-- 		</dependency> -->
 	</dependencies>
+
+	<repositories>
+		<repository>
+			<id>jcenter</id>
+			<url>https://jcenter.bintray.com/</url>
+		</repository>
+	</repositories>
 
 	<build>
 		<finalName>SanalSRP</finalName>

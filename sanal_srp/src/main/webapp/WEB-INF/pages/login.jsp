@@ -3,6 +3,7 @@
 <html>
 <head>
 <title>Login Page</title>
+<!--
 <style>
 .error {
 	padding: 15px;
@@ -34,10 +35,11 @@
 	border: 1px solid #000;
 }
 </style>
+-->
 </head>
 <body onload='document.loginForm.username.focus();'>
 
-	<h1>Spring Security Login Form (Database Authentication)</h1>
+	<h1>Spring SRP Login Form</h1>
 
 	<div id="login-box">
 

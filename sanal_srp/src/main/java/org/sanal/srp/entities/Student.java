@@ -2,14 +2,23 @@ package org.sanal.srp.entities;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
+import javax.validation.constraints.Size;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 import lombok.Data;
 
@@ -23,27 +32,38 @@ public class Student {
 	@Column(name = "student_id")
 	private int studentId;
 
-	@Column(name = "student_extra_uq_no")
+	// which no we have to enter
+	@Column(name = "student_extra_uq_no", nullable = true)
 	private String studentExtraUqNo;
 
-	@Column(name = "student_name")
+	@Size(min = 3, max = 50)
+	@Column(name = "student_name", length = 50, nullable = false)
 	private String firstName;
 
-	@Column(name = "student_surname")
+	@Size(min = 3, max = 50)
+	@Column(name = "student_surname", length = 50, nullable = false)
 	private String lastName;
 
-	@Column(name = "student_gender")
+	@NotNull
+	@Column(name = "student_gender", nullable = false)
 	private Boolean studentGender;
 
-	@Column(name = "student_dob")
+	@NotNull
+	@Past
+	@DateTimeFormat(pattern = "DD/MM/YYYY")
+	@Temporal(TemporalType.DATE)
+	@Column(name = "student_dob", nullable = false)
 	private String studentDob;
 
-	@Column(name = "poc_name")
+	@Size(min = 3, max = 50)
+	@Column(name = "poc_name", nullable = false)
 	private String pocName;
 
-	@Column(name = "poc_contact_no")
+//	@Phone
+	@Column(name = "poc_contact_no", nullable = false)
 	private String pocContactNo;
 
+//	@Size()
 	@Column(name = "relation")
 	private String pocRelation;
 
@@ -88,33 +108,36 @@ public class Student {
 
 	@Column(name = "commuting_by")
 	private String commutingBy;
-	
-	@ManyToOne
+
+	// @OneToOne -- sunil, to save all the present and future address
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "present_address_id")
 	private Address presentAddress;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "permanent_address_id")
 	private Address permanentAddress;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "previous_school_id")
 	private School previousSchool;
-	
-	@ManyToOne
+
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "commuting_from")
 	private Address commutingFrom;
 
-	@Column(name = "created_by")
+	@Column(name = "created_by", nullable = false)
 	private int createdBy;
 
-	@Column(name = "creation_date")
+	@Temporal(TemporalType.DATE)
+	@Column(name = "creation_date", nullable = false)
 	private Date creationDate;
 
-	@Column(name = "last_updated_by")
+	@Column(name = "last_updated_by", nullable = false)
 	private int lastUpdatedBy;
 
-	@Column(name = "last_updation_date")
+	@Temporal(TemporalType.DATE)
+	@Column(name = "last_updation_date", nullable = false)
 	private Date lastUpdationDate;
 
 }

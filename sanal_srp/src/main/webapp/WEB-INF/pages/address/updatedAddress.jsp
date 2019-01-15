@@ -5,9 +5,10 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Address</title>
+<title>Address updated successfully</title>
 </head>
 <body>
+Address updated successfully. Here is the updated address
 Address : 
 <br/>
 	Door/House No : ${address.doorOrHouseNo} <br />

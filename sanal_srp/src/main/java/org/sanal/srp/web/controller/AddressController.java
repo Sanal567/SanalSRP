@@ -2,6 +2,7 @@ package org.sanal.srp.web.controller;
 
 import java.sql.Date;
 
+import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 
 import org.sanal.srp.entities.Address;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 /**
  * @author Sunil Nalluru Date 3-1-19 12:04 AM
  */
+//@RolesAllowed({"ROLE_ADMIN, ROLE_USER"})
 @Controller
 public class AddressController {
 
@@ -26,38 +28,30 @@ public class AddressController {
 
 	@GetMapping("/address/editAddress")
 	public String editAddress(Model editAddress, @RequestParam("addressId") Integer addressId) {
-
-		Address address = null;
-		if (addressId != null) {
-			address = addressService.getAddress(addressId);
-			editAddress.addAttribute("address", address);
-			return "/address/editAddress";
-		} else {
-			editAddress.addAttribute("error", "Invalid URL: Please click a student to view address");
-			return "/home";
-		}
+		editAddress.addAttribute("address", addressService.getAddress(addressId));
+		return "/address/editAddress";
 	}
 
 //	@Autowired
-//	private AddessValidator addressValidator;  ,BindingResult bindingResult, Error errors  
+//	private AddessValidator addressValidator;  
 
 	@PostMapping("/address/saveAddress")
 	public String saveAddress(Model model, @ModelAttribute("address") Address address) {
 		address = addressService.saveAddress(address);
 		model.addAttribute("address", address);
-		return "viewAddress";
+		return "savedAddress";
 	}
 
 	@PostMapping("/address/updateAddress")
 	public String updateAddress(Model model, @Valid Address address, BindingResult bindingResult) {
-		if (bindingResult.hasErrors())
+		if (bindingResult.hasErrors()) {
 			return "/address/editAddress";
-		else {
+		} else {
 			address.setLastUpdatedBy(0);
 			address.setLastUpdationDate(new Date(System.currentTimeMillis()));
-			addressService.updateAddress(address);
+			address = addressService.updateAddress(address);
 			model.addAttribute("address", address);
-			return "viewAddress";
+			return "/address/updatedAddress";
 		}
 	}
 }

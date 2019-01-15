@@ -7,19 +7,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"
-	type="text/javascript"></script>
-<script
-	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
-	type="text/javascript"></script>
-<script
-	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
-	type="text/javascript"></script>
-<meta charset="ISO-8859-1">
+
+<%@include file="../bootstrap_files.html" %>
+
 <title>Edit Address</title>
 <!-- <style type="text/css">
 .error {
@@ -53,7 +43,7 @@
 					</div>
 					<div class="row">
 						<div class="col">
-							<label for="streetOne">Street/Village <sup
+							<label for="streetOne">Street/Village<sup
 								style="color: red;">*</sup>:
 							</label>
 						</div>
@@ -88,7 +78,8 @@
 					</div>
 					<div class="row">
 						<div class="col">
-							<label for="Mandal">Mandal : </label>
+							<label for="Mandal">Mandal<sup
+								style="color: red;">*</sup>: </label>
 						</div>
 						<div class="col">
 							<form:input path="mandal" class="form-control mb-2" />
@@ -99,7 +90,8 @@
 					</div>
 					<div class="row">
 						<div class="col">
-							<label for="district">District : </label>
+							<label for="district">District<sup
+								style="color: red;">*</sup>: </label>
 						</div>
 						<div class="col">
 							<form:input path="district" class="form-control mb-2" />
@@ -110,7 +102,8 @@
 					</div>
 					<div class="row">
 						<div class="col">
-							<label for="pinCode">PIN Code : </label>
+							<label for="pinCode">PIN Code<sup
+								style="color: red;">*</sup>: </label>
 						</div>
 						<div class="col">
 							<form:input path="pinCode" class="form-control mb-2" />
@@ -136,6 +129,7 @@
 						</div>
 					</div>
 				</fieldset>
+				<form:hidden path="addressId"/>
 			</form:form>
 		</div>
 	</div>

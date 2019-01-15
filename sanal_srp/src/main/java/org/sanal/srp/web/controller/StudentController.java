@@ -28,10 +28,10 @@ public class StudentController {
 	public ModelAndView showStudentDetails(@RequestParam("studentId") Integer studentId) {
 
 		ModelAndView studentDetails = new ModelAndView();
-		if (studentId != null && studentId.toString().length() != 0) {
+		if (studentId.toString().length() != 0) {
 			studentDetails.addObject("student", studentService.findById(studentId));
 		} else {
-			System.out.println("studentId is null or it is empty string");
+			System.out.println("studentId is empty string");
 		}
 		return studentDetails;
 	}

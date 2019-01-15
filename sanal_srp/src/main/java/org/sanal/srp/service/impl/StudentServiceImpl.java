@@ -35,12 +35,13 @@ public class StudentServiceImpl implements StudentService {
 
 		if ((firstName != null && firstName.trim().length() != 0)
 				&& (lastName != null && lastName.trim().length() != 0))
-			return studentRepository.findByFirstNameAndLastName(firstName, lastName);
-
+			return studentRepository
+					.findDistinctStudentByFirstNameContainingOrLastNameContainingAllIgnoreCaseOrderByFirstNameAsc(
+							firstName, lastName);
 		else if (firstName != null && firstName.trim().length() != 0)
-			return studentRepository.findByFirstName(firstName);
+			return studentRepository.findByFirstNameIgnoreCaseContainingOrderByFirstNameAsc(firstName);
 		else
-			return studentRepository.findByLastName(lastName);
+			return studentRepository.findByLastNameIgnoreCaseContainingOrderByLastNameAsc(lastName);
 
 	}
 
