@@ -6,7 +6,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<%@include file="../bootstrap_files.html"%>
+<%@include file="../bootstrap_files.jsp"%>
 
 <title>Search Student</title>
 <!-- <style>

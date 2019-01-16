@@ -17,7 +17,7 @@
 			<c:forEach var="student" items="${studentList}">
 				<a
 					href="${contextPath}/student/viewStudentDetails?studentId=${student.studentId}">
-					${student.firstName}</a> : ${student.lastName}
+					${student.firstName}</a> : ${student.lastName} <br/>
 			</c:forEach>
 		</c:when>
 		<c:otherwise>

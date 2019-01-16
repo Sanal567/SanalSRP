@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<%@include file="../bootstrap_files.html"%>
+<%@include file="../bootstrap_files.jsp"%>
 <title>Student Details</title>
 </head>
 <body>

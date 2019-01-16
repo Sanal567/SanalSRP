@@ -49,9 +49,9 @@ public class Student {
 	private Boolean studentGender;
 
 	@NotNull
-	@Past
-	@DateTimeFormat(pattern = "DD/MM/YYYY")
-	@Temporal(TemporalType.DATE)
+//	@Past
+//	@DateTimeFormat(pattern = "DD/MM/YYYY")
+//	@Temporal(TemporalType.DATE)
 	@Column(name = "student_dob", nullable = false)
 	private String studentDob;
 

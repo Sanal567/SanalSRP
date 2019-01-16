@@ -8,7 +8,7 @@
 <html>
 <head>
 
-<%@include file="../bootstrap_files.html" %>
+<%@include file="../bootstrap_files.jsp" %>
 
 <title>Edit Address</title>
 <!-- <style type="text/css">

@@ -21,6 +21,7 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
@@ -47,7 +48,7 @@ import com.zaxxer.hikari.HikariDataSource;
 @EnableJpaRepositories(basePackages = { "org.sanal.srp.repository" })
 @ComponentScan({ "org.sanal.srp.*" })
 @Import({ SecurityConfig.class })
-public class AppConfig /* extends WebMvcConfigurerAdapter */ {
+public class AppConfig implements WebMvcConfigurer/* extends WebMvcConfigurerAdapter */ {
 
 	@Autowired
 	private Environment environment;
@@ -120,17 +121,17 @@ public class AppConfig /* extends WebMvcConfigurerAdapter */ {
 		return transactionManager;
 	}
 
-//	@Override
-	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+	@Override
+	public void addResourceHandlers(final ResourceHandlerRegistry registry) {
 		registry.addResourceHandler("/global/**").addResourceLocations("/resources/");
-		registry.addResourceHandler("/images/**/*").addResourceLocations("resources/images/");
-		registry.addResourceHandler("/fonts/**/*").addResourceLocations("resources/fonts/");
-		registry.addResourceHandler("/js/**/*").addResourceLocations("resources/js/");
-		registry.addResourceHandler("/lib/**/*").addResourceLocations("resources/lib/");
+		registry.addResourceHandler("/images/**/*").addResourceLocations("/resources/images/");
+		registry.addResourceHandler("/fonts/**/*").addResourceLocations("/resources/fonts/");
+		registry.addResourceHandler("/js/**/*").addResourceLocations("/resources/js/");
+		registry.addResourceHandler("/lib/**/*").addResourceLocations("/resources/lib/");
 		registry.addResourceHandler("/css/**").addResourceLocations("/resources/css/");
-		// registry.addResourceHandler("/open/**/*").addResourceLocations("/WEB-INF/views/pages/public/");
-		// registry.addResourceHandler("/secured/**/*").addResourceLocations("/WEB-INF/views/pages/secured/");
-		// registry.addResourceHandler("/admin/**/*").addResourceLocations("/WEB-INF/views/pages/admin/");
+		registry.addResourceHandler("/open/**/*").addResourceLocations("/WEB-INF/views/pages/public/");
+//		registry.addResourceHandler("/secured/**/*").addResourceLocations("/WEB-INF/views/pages/secured/");
+//		registry.addResourceHandler("/admin/**/*").addResourceLocations("/WEB-INF/views/pages/admin/");
 	}
 
 	@Bean
