@@ -17,6 +17,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.HibernateJpaDialect;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -43,7 +44,7 @@ import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration
 @EnableWebMvc
-@EnableTransactionManagement
+@EnableTransactionManagement()
 @PropertySource("classpath:/application.properties")
 @EnableJpaRepositories(basePackages = { "org.sanal.srp.repository" })
 @ComponentScan({ "org.sanal.srp.*" })
@@ -65,6 +66,13 @@ public class AppConfig implements WebMvcConfigurer/* extends WebMvcConfigurerAda
 		dataSourceConfig.setJdbcUrl(environment.getProperty("jdbc.url"));
 		dataSourceConfig.setUsername(environment.getProperty("jdbc.username"));
 		dataSourceConfig.setPassword(environment.getProperty("jdbc.password"));
+
+
+		ds.setMaximumPoolSize(100);
+	    ds.addDataSourceProperty("cachePrepStmts", true);
+	    ds.addDataSourceProperty("prepStmtCacheSize", 250);
+	    ds.addDataSourceProperty("prepStmtCacheSqlLimit", 2048);
+	    ds.addDataSourceProperty("useServerPrepStmts", true);
 		return new HikariDataSource(dataSourceConfig);
 	}
 
@@ -80,6 +88,13 @@ public class AppConfig implements WebMvcConfigurer/* extends WebMvcConfigurerAda
 
 		LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
 		entityManagerFactoryBean.setDataSource(dataSource);
+		
+		HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+        vendorAdapter.setGenerateDdl(true);
+        vendorAdapter.setShowSql(false);
+        vendorAdapter.setDatabasePlatform("org.hibernate.dialect.MySQL5InnoDBDialect");
+        vendorAdapter.setDatabase(Database.MYSQL);
+        
 		entityManagerFactoryBean.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
 		entityManagerFactoryBean.setPackagesToScan("org.sanal.srp.entities");
 
@@ -102,8 +117,23 @@ public class AppConfig implements WebMvcConfigurer/* extends WebMvcConfigurerAda
 				environment.getProperty("hibernate.jdbc.lob.non_contextual_creation"));
 		jpaProperties.put("hibernate.enable_lazy_load_no_trans",
 				environment.getProperty("hibernate.enable_lazy_load_no_trans"));
+		
+		properties.setProperty("hibernate.cache.use_second_level_cache", "true");
+        properties.setProperty("hibernate.cache.region.factory_class", "org.hibernate.cache.ehcache.EhCacheRegionFactory");
+        properties.setProperty("hibernate.cache.use_query_cache", "true");
+        properties.setProperty("hibernate.generate_statistics", "true");
+        
+        <prop key="hibernate.connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</prop>
+        <prop key="hibernate.c3p0.min_size">5</prop>
+        <prop key="hibernate.c3p0.max_size">30</prop>
+        <prop key="hibernate.c3p0.timeout">300</prop>
+        <prop key="hibernate.c3p0.max_statements">50</prop>
+        <prop key="hibernate.c3p0.idle_test_period">600<
+ 
 		entityManagerFactoryBean.setJpaProperties(jpaProperties);
 
+       // entityManagerFactoryBean.afterPropertiesSet();
+        
 		return entityManagerFactoryBean;
 	}
 
@@ -115,21 +145,22 @@ public class AppConfig implements WebMvcConfigurer/* extends WebMvcConfigurerAda
 	 * @return {@link JpaTransactionManager}
 	 */
 	@Bean
-	JpaTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
+	public JpaTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
 		JpaTransactionManager transactionManager = new JpaTransactionManager();
 		transactionManager.setEntityManagerFactory(entityManagerFactory);
+	//	transactionManager.setJpaDialect(new HibernateJpaDialect());
 		return transactionManager;
 	}
 
 	@Override
 	public void addResourceHandlers(final ResourceHandlerRegistry registry) {
-		registry.addResourceHandler("/global/**").addResourceLocations("/resources/");
+//		registry.addResourceHandler("/global/**").addResourceLocations("/resources/");
 		registry.addResourceHandler("/images/**/*").addResourceLocations("/resources/images/");
-		registry.addResourceHandler("/fonts/**/*").addResourceLocations("/resources/fonts/");
+//		registry.addResourceHandler("/fonts/**/*").addResourceLocations("/resources/fonts/");
 		registry.addResourceHandler("/js/**/*").addResourceLocations("/resources/js/");
-		registry.addResourceHandler("/lib/**/*").addResourceLocations("/resources/lib/");
+//		registry.addResourceHandler("/lib/**/*").addResourceLocations("/resources/lib/");
 		registry.addResourceHandler("/css/**").addResourceLocations("/resources/css/");
-		registry.addResourceHandler("/open/**/*").addResourceLocations("/WEB-INF/views/pages/public/");
+//		registry.addResourceHandler("/open/**/*").addResourceLocations("/WEB-INF/views/pages/public/");
 //		registry.addResourceHandler("/secured/**/*").addResourceLocations("/WEB-INF/views/pages/secured/");
 //		registry.addResourceHandler("/admin/**/*").addResourceLocations("/WEB-INF/views/pages/admin/");
 	}
