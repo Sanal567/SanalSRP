@@ -17,13 +17,11 @@ import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
-import org.springframework.orm.jpa.vendor.HibernateJpaDialect;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
@@ -44,7 +42,7 @@ import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration
 @EnableWebMvc
-@EnableTransactionManagement()
+@EnableTransactionManagement
 @PropertySource("classpath:/application.properties")
 @EnableJpaRepositories(basePackages = { "org.sanal.srp.repository" })
 @ComponentScan({ "org.sanal.srp.*" })
@@ -59,20 +57,21 @@ public class AppConfig implements WebMvcConfigurer/* extends WebMvcConfigurerAda
 	 * 
 	 * @return {@link DataSource}
 	 */
+
 	@Bean(name = "dataSource", destroyMethod = "close")
 	public DataSource dataSource() {
 		HikariConfig dataSourceConfig = new HikariConfig();
-		dataSourceConfig.setDriverClassName(environment.getProperty("jdbc.driverClassName"));
-		dataSourceConfig.setJdbcUrl(environment.getProperty("jdbc.url"));
-		dataSourceConfig.setUsername(environment.getProperty("jdbc.username"));
-		dataSourceConfig.setPassword(environment.getProperty("jdbc.password"));
-
-
-		ds.setMaximumPoolSize(100);
-	    ds.addDataSourceProperty("cachePrepStmts", true);
-	    ds.addDataSourceProperty("prepStmtCacheSize", 250);
-	    ds.addDataSourceProperty("prepStmtCacheSqlLimit", 2048);
-	    ds.addDataSourceProperty("useServerPrepStmts", true);
+		dataSourceConfig.setDataSourceClassName(environment.getProperty("dataSourceClassName"));
+		dataSourceConfig.setJdbcUrl(environment.getProperty("hibernate.connection.url"));
+		dataSourceConfig.setUsername(environment.getProperty("hibernate.connection.username"));
+		dataSourceConfig.setPassword(environment.getProperty("hibernate.connection.password"));
+		dataSourceConfig.setPoolName("aaaa");
+		// dataSourceConfig.setConnectionTestQuery("SELECT 1"); //
+		// dataSourceConfig.setMaximumPoolSize(100); //
+		// dataSourceConfig.addDataSourceProperty("cachePrepStmts", true); //
+		// dataSourceConfig.addDataSourceProperty("prepStmtCacheSize", 250); //
+		// dataSourceConfig.addDataSourceProperty("prepStmtCacheSqlLimit", 2048); //
+		// dataSourceConfig.addDataSourceProperty("useServerPrepStmts", true);
 		return new HikariDataSource(dataSourceConfig);
 	}
 
@@ -82,19 +81,20 @@ public class AppConfig implements WebMvcConfigurer/* extends WebMvcConfigurerAda
 	 * @param dataSource The datasource that provides the database connections.
 	 * @return {@link LocalContainerEntityManagerFactoryBean}
 	 */
+
+	// @Autowired
 	@Bean
-	@Autowired
-	public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) {
+	public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
 
 		LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
-		entityManagerFactoryBean.setDataSource(dataSource);
-		
+		entityManagerFactoryBean.setDataSource(dataSource());
+
 		HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-        vendorAdapter.setGenerateDdl(true);
-        vendorAdapter.setShowSql(false);
-        vendorAdapter.setDatabasePlatform("org.hibernate.dialect.MySQL5InnoDBDialect");
-        vendorAdapter.setDatabase(Database.MYSQL);
-        
+		vendorAdapter.setGenerateDdl(true);
+		// vendorAdapter.setShowSql(false);
+		// vendorAdapter.setDatabasePlatform("org.hibernate.dialect.MySQL5InnoDBDialect");
+		// vendorAdapter.setDatabase(Database.MYSQL);
+
 		entityManagerFactoryBean.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
 		entityManagerFactoryBean.setPackagesToScan("org.sanal.srp.entities");
 
@@ -104,10 +104,11 @@ public class AppConfig implements WebMvcConfigurer/* extends WebMvcConfigurerAda
 		// Specifies the action that is invoked to the database when the Hibernate
 		// SessionFactory is created or closed.
 		// jpaProperties.put("hibernate.hbm2ddl.auto",
-		// env.getProperty("hibernate.hbm2ddl.auto"));
+		// environment.getProperty("hibernate.hbm2ddl.auto"));
 		// Configures the naming strategy that is used when Hibernate creates
 		// new database objects and schema elements
-		jpaProperties.put("hibernate.ejb.naming_strategy", environment.getProperty("hibernate.ejb.naming_strategy"));
+		jpaProperties.put("hibernate.implicit_naming_strategy",
+				environment.getProperty("hibernate.implicit_naming_strategy"));
 		// If the value of this property is true, Hibernate will use prettyprint
 		// when it writes SQL to the console.
 		jpaProperties.put("hibernate.format_sql", environment.getProperty("hibernate.format_sql"));
@@ -117,23 +118,35 @@ public class AppConfig implements WebMvcConfigurer/* extends WebMvcConfigurerAda
 				environment.getProperty("hibernate.jdbc.lob.non_contextual_creation"));
 		jpaProperties.put("hibernate.enable_lazy_load_no_trans",
 				environment.getProperty("hibernate.enable_lazy_load_no_trans"));
-		
-		properties.setProperty("hibernate.cache.use_second_level_cache", "true");
-        properties.setProperty("hibernate.cache.region.factory_class", "org.hibernate.cache.ehcache.EhCacheRegionFactory");
-        properties.setProperty("hibernate.cache.use_query_cache", "true");
-        properties.setProperty("hibernate.generate_statistics", "true");
-        
-        <prop key="hibernate.connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</prop>
-        <prop key="hibernate.c3p0.min_size">5</prop>
-        <prop key="hibernate.c3p0.max_size">30</prop>
-        <prop key="hibernate.c3p0.timeout">300</prop>
-        <prop key="hibernate.c3p0.max_statements">50</prop>
-        <prop key="hibernate.c3p0.idle_test_period">600<
- 
+//	jpaProperties.setProperty("hibernate.default_schema", environment.getProperty("hibernate.default_schema"));
+		jpaProperties.setProperty("hibernate.cache.use_second_level_cache",
+				environment.getProperty("hibernate.cache.use_second_level_cache"));
+		jpaProperties.setProperty("hibernate.cache.region.factory_class",
+				environment.getProperty("hibernate.cache.region.factory_class"));
+		jpaProperties.setProperty("hibernate.javax.cache.provider",
+				environment.getProperty("hibernate.javax.cache.provider"));
+
+		jpaProperties.setProperty("hibernate.cache.use_query_cache",
+				environment.getProperty("hibernate.cache.use_query_cache"));
+		jpaProperties.setProperty("hibernate.generate_statistics",
+				environment.getProperty("hibernate.generate_statistics"));
+
+		jpaProperties.setProperty("hibernate.connection.provider_class",
+				environment.getProperty("hibernate.connection.provider_class"));
+
+		jpaProperties.setProperty("hibernate.hikari.dataSourceClassName",
+				environment.getProperty("dataSourceClassName"));
+		jpaProperties.setProperty("hibernate.hikari.username",
+				environment.getProperty("hibernate.connection.username"));
+		jpaProperties.setProperty("hibernate.hikari.password",
+				environment.getProperty("hibernate.connection.password"));
+		// jpaProperties.setProperty("hibernate.hikari.jdbcUrl",
+		// environment.getProperty("hibernate.connection.url"));
+
 		entityManagerFactoryBean.setJpaProperties(jpaProperties);
 
-       // entityManagerFactoryBean.afterPropertiesSet();
-        
+		// entityManagerFactoryBean.afterPropertiesSet();
+
 		return entityManagerFactoryBean;
 	}
 
@@ -145,10 +158,10 @@ public class AppConfig implements WebMvcConfigurer/* extends WebMvcConfigurerAda
 	 * @return {@link JpaTransactionManager}
 	 */
 	@Bean
-	public JpaTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
+	public JpaTransactionManager transactionManager() {
 		JpaTransactionManager transactionManager = new JpaTransactionManager();
-		transactionManager.setEntityManagerFactory(entityManagerFactory);
-	//	transactionManager.setJpaDialect(new HibernateJpaDialect());
+		transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
+		// transactionManager.setJpaDialect(new HibernateJpaDialect());
 		return transactionManager;
 	}
 

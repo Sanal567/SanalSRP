@@ -2,13 +2,13 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
-
 <!DOCTYPE html>
 <html lang="en">
-<head>
 <%@include file="../bootstrap_files.jsp"%>
-
+<link rel="stylesheet" href="${contextPath}/css/srp_core.css"/>
+<head>
 <title>Search Student</title>
+
 <!-- <style>
 .error {
 	padding: 15px;
@@ -19,27 +19,45 @@
 	background-color: #f2dede;
 	border-color: #ebccd1;
 }
-</style>
- -->
+</style> -->
+<!--  <script type="text/javascript">
+ 
+ $(document.ready(){
+	  $("#javaScriptErrorMessage").hide();
+	  });
+
+	function validate(){
+		 var firstName = $("#FirstName").val;
+	     var lastName = $("#LastName").val;
+
+	    if ( (firstName.length === 0 ) || (lastName.length === 0) 
+			 $("#javaScriptErrorMessage").show();
+	 } 
+ 
+ </script> -->
 </head>
 <body>
 	<div class="container mt-3">
 		<form:form class="form-inline" method="post"
 			action="${contextPath}/student/searchStudent"
-			modelAttribute="student">
+			modelAttribute="student" ><%-- onsubmit="javascript:validate()" --%>
 			<fieldset>
 				<legend>Search by Student Name</legend>
+			
 				<c:if test="${not empty error}">
 					<div class="alert alert-danger alert-dismissible fade show">
 						<button type="button" class="close" data-dismiss="alert">&times;</button>${error}</div>
 				</c:if>
+	
+				<div id="javaScriptErrorMessage" class="alert alert-danger alert-dismissible fade show">
+				<button type="button" class="close" data-dismiss="alert">&times;</button>${error}</div>
 
 				<div class="input-group mb-3">
 					<label for="FirstName" class="mr-sm-2">First Name : </label>
-					<form:input path="FirstName" class="form-control mr-sm-2"
+					<form:input path="FirstName" pattern="[A-Za-z ]{3,50}" size="10"  class="form-control mr-sm-2"
 						placeholder="First Name" />
 					<label for="LastName" class="mr-sm-2">Last Name : </label>
-					<form:input path="LastName" class="form-control mr-sm-2"
+					<form:input path="LastName" pattern="[A-Za-z ]{3,50}" size="10" class="form-control mr-sm-2"
 						placeholder="Last Name" />
 					<div class="input-group-append">
 						<button class="btn btn-success" type="submit">Search</button>

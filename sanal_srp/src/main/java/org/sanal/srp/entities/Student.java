@@ -1,5 +1,6 @@
 package org.sanal.srp.entities;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.CascadeType;
@@ -25,7 +26,7 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "sanal.students")
-public class Student {
+public class Student implements Serializable{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

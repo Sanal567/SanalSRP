@@ -2,10 +2,22 @@
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Admit student - Joining form - Page 1</title>
+<%@include file="../bootstrap_files.jsp" %>
+</head>
+
+<div class="container">
+
 <form:form method="POST" modelAttribute="student"
 	action="${contextPath}/admission/admit">
 	<%-- name="" id="" class="" onsubmit="" --%>
-	Admissions <br />
+<fieldset> <legend>Admissions</legend>
+<div class="row">
+<div class="col">
 	<label for="class">Admission to Class</label>
 	<%-- <form:select id="class" path="">
 		<form:option value="">Choose...</form:option>
@@ -17,6 +29,8 @@
 		</c:forEach>
 	</form:select>
 	 --%>
+</div>
+</div>
 	<font size='3'><b>9966691989</b></font>
 	<br />
 	First Name :<form:input path="firstName" size="10" maxlength="20"
@@ -60,6 +74,7 @@
 	<input type="date" />
  --%>
 	<input type="submit" value="Save" />
+	</fieldset>
 </form:form>
 <br />
 which is better for gender selection...radio button, checkbox or select
@@ -68,3 +83,5 @@ option
 Is admission no is automatically generates?
 <br />
 Option to enter already joined students
+</div>
+</html>
