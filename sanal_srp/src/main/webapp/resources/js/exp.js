@@ -1,5 +1,3 @@
-script type="text/javascript">
-
 var defaultActiveLettersTableBody = ">";
 var defaultInactiveLettersTableBody = ">";
 
@@ -24,6 +22,7 @@ $( document ).ready( function() {
                        success : function(data) {
                               if (data.length > 0) {
                                      $.each(data, function(index, value) {
+                                    	 
                                             tbody = tbody + "<tr><td>"
                                                           + value.letterVersionId + "</td>"
                                                           + "<td>" + value.letterName + "</td>"
@@ -104,5 +103,3 @@ $( document ).ready( function() {
     	  
     	    return month+"/"+day+"/"+year+" "+d.getHours()+":"+d.getMinutes()+":"+d.getSeconds();
     	}
-       
-	</script>

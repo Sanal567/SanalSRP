@@ -26,20 +26,29 @@
 		<option value="3">3</option>
 		<c:forEach var="eduClass" items="${allClasses}">
 			<form:option value="${eduClass.classId}">${eduClass.className}</form:option>
+			<form:options items="${countryList}" itemValue="code" itemLabel="name"/>
+			
+
+<form:hidden path="house"/>
+
+			
 		</c:forEach>
 	</form:select>
 	 --%>
 </div>
 </div>
-	<font size='3'><b>9966691989</b></font>
+	
 	<br />
-	First Name :<form:input path="firstName" size="10" maxlength="20"
+	First Name :<form:input path="firstName" pattern="[A-Za-z ]{3,25}" size="10" 
 		placeholder="First Name" spellcheck="false" />
-	<br />	Last Name: <form:input path="lastName" size="10" maxlength="20"
+	<br />	Last Name: <form:input path="lastName" pattern="[A-Za-z ]{3,25}" size="10" 
 		spellcheck="false" placeholder="Last Name" />
 
-	<br />	Gender Male: <form:radiobutton path="studentGender" value="M" />
-        Female: <form:radiobutton path="studentGender" value="F" />
+	<br />	Gender <form:select path="studentGender">
+	<form:option value="--Select One---" selected="selected" />
+	<form:option value="Male">Male</form:option>
+	<form:option value="Female">Female</form:option>
+        </form:select>
 	<br /> Date of	birth : <%-- <form:select name="date">
 
 		<option value="choose">Choose one</option>

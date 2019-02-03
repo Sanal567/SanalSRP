@@ -2,7 +2,6 @@ package org.sanal.srp.config;
 
 import java.util.Properties;
 
-import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +14,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
@@ -40,6 +40,8 @@ import com.zaxxer.hikari.HikariDataSource;
  * @author sanal567 Date 14-10-18 10:58 PM
  */
 
+//@EnableCaching
+@EnableSpringDataWebSupport
 @Configuration
 @EnableWebMvc
 @EnableTransactionManagement
@@ -89,8 +91,8 @@ public class AppConfig implements WebMvcConfigurer/* extends WebMvcConfigurerAda
 		LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
 		entityManagerFactoryBean.setDataSource(dataSource());
 
-		HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-		vendorAdapter.setGenerateDdl(true);
+		// HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+		// vendorAdapter.setGenerateDdl(true);
 		// vendorAdapter.setShowSql(false);
 		// vendorAdapter.setDatabasePlatform("org.hibernate.dialect.MySQL5InnoDBDialect");
 		// vendorAdapter.setDatabase(Database.MYSQL);
@@ -125,14 +127,14 @@ public class AppConfig implements WebMvcConfigurer/* extends WebMvcConfigurerAda
 				environment.getProperty("hibernate.cache.region.factory_class"));
 		jpaProperties.setProperty("hibernate.javax.cache.provider",
 				environment.getProperty("hibernate.javax.cache.provider"));
-
 		jpaProperties.setProperty("hibernate.cache.use_query_cache",
 				environment.getProperty("hibernate.cache.use_query_cache"));
 		jpaProperties.setProperty("hibernate.generate_statistics",
 				environment.getProperty("hibernate.generate_statistics"));
-
 		jpaProperties.setProperty("hibernate.connection.provider_class",
 				environment.getProperty("hibernate.connection.provider_class"));
+		jpaProperties.setProperty("javax.persistence.sharedCache.mode",
+				environment.getProperty("javax.persistence.sharedCache.mode"));
 
 		jpaProperties.setProperty("hibernate.hikari.dataSourceClassName",
 				environment.getProperty("dataSourceClassName"));
@@ -167,15 +169,9 @@ public class AppConfig implements WebMvcConfigurer/* extends WebMvcConfigurerAda
 
 	@Override
 	public void addResourceHandlers(final ResourceHandlerRegistry registry) {
-//		registry.addResourceHandler("/global/**").addResourceLocations("/resources/");
 		registry.addResourceHandler("/images/**/*").addResourceLocations("/resources/images/");
-//		registry.addResourceHandler("/fonts/**/*").addResourceLocations("/resources/fonts/");
 		registry.addResourceHandler("/js/**/*").addResourceLocations("/resources/js/");
-//		registry.addResourceHandler("/lib/**/*").addResourceLocations("/resources/lib/");
 		registry.addResourceHandler("/css/**").addResourceLocations("/resources/css/");
-//		registry.addResourceHandler("/open/**/*").addResourceLocations("/WEB-INF/views/pages/public/");
-//		registry.addResourceHandler("/secured/**/*").addResourceLocations("/WEB-INF/views/pages/secured/");
-//		registry.addResourceHandler("/admin/**/*").addResourceLocations("/WEB-INF/views/pages/admin/");
 	}
 
 	@Bean
@@ -195,4 +191,21 @@ public class AppConfig implements WebMvcConfigurer/* extends WebMvcConfigurerAda
 		return viewResolver;
 	}
 
+	/*
+	 * @Bean public CacheManager cacheManager() { SimpleCacheManager cacheManager =
+	 * new SimpleCacheManager(); cacheManager.setCaches(Arrays.asList(new
+	 * ConcurrentMapCache("byFirstNameAndLastName"))); return cacheManager; }
+	 * 
+	 * @Bean(name = "cacheManager") public EhCacheCacheManager ehCacheCacheManager()
+	 * { return new EhCacheCacheManager(ehCache()); }
+	 * 
+	 * @Bean public CacheManager ehCache() { CacheManager cacheManager =
+	 * CacheManager.create(); Cache sampleEntityCache = new Cache(new
+	 * CacheConfiguration("com.abc.examples.entity.SampleEntity", 500)
+	 * .memoryStoreEvictionPolicy(MemoryStoreEvictionPolicy.LRU).eternal(false).
+	 * timeToLiveSeconds(60 * 60 * 24) .timeToIdleSeconds(60 * 60 * 24)
+	 * .persistence(new
+	 * PersistenceConfiguration().strategy(PersistenceConfiguration.Strategy.NONE)))
+	 * ; cacheManager.addCache(sampleEntityCache); return cacheManager; }
+	 */
 }

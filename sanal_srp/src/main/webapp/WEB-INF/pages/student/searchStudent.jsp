@@ -5,7 +5,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <%@include file="../bootstrap_files.jsp"%>
-<link rel="stylesheet" href="${contextPath}/css/srp_core.css"/>
+<link rel="stylesheet" href="${contextPath}/css/srp_core.css" />
 <head>
 <title>Search Student</title>
 
@@ -20,45 +20,63 @@
 	border-color: #ebccd1;
 }
 </style> -->
-<!--  <script type="text/javascript">
- 
- $(document.ready(){
+<script type="text/javascript">
+ $(document).ready(function() {
 	  $("#javaScriptErrorMessage").hide();
 	  });
 
 	function validate(){
-		 var firstName = $("#FirstName").val;
-	     var lastName = $("#LastName").val;
+		debugger;
+		 var firstName = $("#FirstName").val();
+	     var lastName = $("#LastName").val();
 
-	    if ( (firstName.length === 0 ) || (lastName.length === 0) 
-			 $("#javaScriptErrorMessage").show();
-	 } 
+	    if ( (firstName.length == 0 ) && (lastName.length == 0)) { 
+			 $("#javaScriptErrorMessage").show(); 
+			 return false; 
+	    } else return true;
+	 }
+
+	$("input[type=submit]").click(function(e)){
+		debugger;
+		 var firstName = $("#FirstName").val();
+	     var lastName = $("#LastName").val();
+
+	    if ( (firstName.length == 0 ) && (lastName.length == 0)){ 
+			 $("#javaScriptErrorMessage").show(); 
+	      }    
+	}
+
+	
+	
+//$(document).on()	
  
- </script> -->
+ </script>
 </head>
 <body>
 	<div class="container mt-3">
 		<form:form class="form-inline" method="post"
 			action="${contextPath}/student/searchStudent"
-			modelAttribute="student" ><%-- onsubmit="javascript:validate()" --%>
+			modelAttribute="student">
+			<!-- onsubmit="javascript:validate()" -->
 			<fieldset>
 				<legend>Search by Student Name</legend>
-			
+
 				<c:if test="${not empty error}">
 					<div class="alert alert-danger alert-dismissible fade show">
 						<button type="button" class="close" data-dismiss="alert">&times;</button>${error}</div>
 				</c:if>
-	
-				<div id="javaScriptErrorMessage" class="alert alert-danger alert-dismissible fade show">
-				<button type="button" class="close" data-dismiss="alert">&times;</button>${error}</div>
+
+				<div id="javaScriptErrorMessage"
+					class="alert alert-danger alert-dismissible fade show">
+					<button type="button" class="close" data-dismiss="alert">&times;</button>${error}</div>
 
 				<div class="input-group mb-3">
 					<label for="FirstName" class="mr-sm-2">First Name : </label>
-					<form:input path="FirstName" pattern="[A-Za-z ]{3,50}" size="10"  class="form-control mr-sm-2"
-						placeholder="First Name" />
+					<form:input path="FirstName" pattern="[A-Za-z ]{3,50}" size="10"
+						class="form-control mr-sm-2" placeholder="First Name" />
 					<label for="LastName" class="mr-sm-2">Last Name : </label>
-					<form:input path="LastName" pattern="[A-Za-z ]{3,50}" size="10" class="form-control mr-sm-2"
-						placeholder="Last Name" />
+					<form:input path="LastName" pattern="[A-Za-z ]{3,50}" size="10"
+						class="form-control mr-sm-2" placeholder="Last Name" />
 					<div class="input-group-append">
 						<button class="btn btn-success" type="submit">Search</button>
 					</div>

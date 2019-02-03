@@ -6,11 +6,15 @@ package org.sanal.srp.service.impl;
 import java.util.List;
 import java.util.Optional;
 
+import org.sanal.srp.entities.QStudent;
 import org.sanal.srp.entities.Student;
+import org.sanal.srp.repository.BaseRepository;
 import org.sanal.srp.repository.StudentRepository;
 import org.sanal.srp.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.querydsl.core.types.dsl.BooleanExpression;
 
 /**
  * @author Nalluru Sunil Reddy
@@ -20,7 +24,7 @@ import org.springframework.stereotype.Service;
 public class StudentServiceImpl implements StudentService {
 
 	@Autowired
-	private StudentRepository studentRepository;
+	private StudentRepository<Student, Integer> studentRepository;
 
 	@Override
 	public void saveStudent(Student student) {
@@ -52,6 +56,17 @@ public class StudentServiceImpl implements StudentService {
 		if (optional.isPresent())
 			s = optional.get();
 		return s;
+	}
+
+	@Autowired 
+	private BaseRepository baseRepository;
+	
+	@Override
+	public List<Student> searchStudentsQueryDsl(Student student) {
+		BooleanExpression booleanExpression = QStudent.student.firstName.containsIgnoreCase(student.getFirstName())
+				.and(QStudent.student.lastName.containsIgnoreCase(student.getLastName()));
+	//	baseRepository.findAll(booleanExpression);
+		return  (List<Student>) studentRepository.findAll(booleanExpression);
 	}
 
 }

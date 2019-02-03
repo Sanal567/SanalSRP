@@ -14,5 +14,7 @@ public interface StudentService {
 
 	public List<Student> searchStudents(Student student);
 
+	public List<Student> searchStudentsQueryDsl(Student student);
+
 	public Student findById(Integer studentId);
 }

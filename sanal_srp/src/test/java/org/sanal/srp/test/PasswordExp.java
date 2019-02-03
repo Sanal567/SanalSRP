@@ -5,9 +5,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 /**
  * @author sanal567 Date 14-10-18 00:22 AM
  */
-public class Test {
+public class PasswordExp {
 
-	public Test() {
+	public PasswordExp() {
 	}
 
 	/**
