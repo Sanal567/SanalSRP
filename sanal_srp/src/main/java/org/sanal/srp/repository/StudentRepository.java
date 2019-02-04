@@ -3,14 +3,15 @@
  */
 package org.sanal.srp.repository;
 
-import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.QueryHint;
 
+import org.sanal.srp.entities.Student;
 import org.springframework.data.jpa.repository.QueryHints;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
 import com.querydsl.core.types.Predicate;
 
@@ -20,10 +21,8 @@ import com.querydsl.core.types.Predicate;
  */
 
 //@CacheConfig(cacheNames = "com.abc.domain.State")
-//@Repository
-//@NoRepositoryBean
-public interface StudentRepository<Student, Integer extends Serializable>
-		extends CrudRepository<Student, Integer>, QuerydslPredicateExecutor<Student> {
+@Repository
+public interface StudentRepository extends CrudRepository<Student, Integer>, QuerydslPredicateExecutor<Student> {
 
 //	@Cacheable("byStudentFirstNameAndLastName")
 	@QueryHints(value = { @QueryHint(name = "org.hibernate.cacheable", value = "true") }, forCounting = false)
@@ -36,12 +35,11 @@ public interface StudentRepository<Student, Integer extends Serializable>
 	@QueryHints(value = { @QueryHint(name = "org.hibernate.cacheable", value = "true") }, forCounting = false)
 	List<Student> findByLastNameIgnoreCaseContainingOrderByLastNameAsc(String lastName);
 
-//	,
 //	@QueryHint(name = "org.hibernate.cacheMode", value = "NORMAL"),
 //	@QueryHint(name = "org.hibernate.cacheRegion", value = "CacheRegion")
-//	@Override
-//	@QueryHints(value = { @QueryHint(name = "org.hibernate.cacheable", value = "true") }, forCounting = false)
-//	List<Student> findAll(Predicate predicate);
+	@Override
+	@QueryHints(value = { @QueryHint(name = "org.hibernate.cacheable", value = "true") }, forCounting = false)
+	List<Student> findAll(Predicate predicate);
 
-	// Page<Student> findAll(Predicate predicate, Pageable pageable);
+// Page<Student> findAll(Predicate predicate, Pageable pageable);
 }

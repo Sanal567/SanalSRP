@@ -24,7 +24,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 public class StudentServiceImpl implements StudentService {
 
 	@Autowired
-	private StudentRepository<Student, Integer> studentRepository;
+	private StudentRepository studentRepository;
 
 	@Override
 	public void saveStudent(Student student) {
@@ -58,9 +58,9 @@ public class StudentServiceImpl implements StudentService {
 		return s;
 	}
 
-	@Autowired 
-	private BaseRepository baseRepository;
-	
+	/*
+	 * @Autowired private BaseRepository baseRepository;
+	 */
 	@Override
 	public List<Student> searchStudentsQueryDsl(Student student) {
 		BooleanExpression booleanExpression = QStudent.student.firstName.containsIgnoreCase(student.getFirstName())

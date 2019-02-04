@@ -75,7 +75,7 @@
 					<form:input path="FirstName" pattern="[A-Za-z ]{3,50}" size="10"
 						class="form-control mr-sm-2" placeholder="First Name" />
 					<label for="LastName" class="mr-sm-2">Last Name : </label>
-					<form:input path="LastName" pattern="[A-Za-z ]{3,50}" size="10"
+					<form:input path="LastName" pattern="[A-Za-z ]{1,50}" size="10"
 						class="form-control mr-sm-2" placeholder="Last Name" />
 					<div class="input-group-append">
 						<button class="btn btn-success" type="submit">Search</button>

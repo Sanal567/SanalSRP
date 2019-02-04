@@ -18,18 +18,18 @@ import com.querydsl.core.types.Predicate;
  * @author Nalluru Sunil Reddy
  *
  */
-@NoRepositoryBean
-public interface BaseRepository<T, ID extends Serializable> extends JpaRepository<T, ID>, QuerydslPredicateExecutor<T> {
+//@NoRepositoryBean
+public interface BaseRepository/*
+								 * <T, ID extends Serializable> extends JpaRepository<T, ID>,
+								 * QuerydslPredicateExecutor<T>
+								 */ {
 
-    @Override
-    List<T> findAll(Predicate predicate);
-
-    @Override
-    List<T> findAll(Predicate predicate, Sort sort);
-
-    @Override
-    List<T> findAll(Predicate predicate, OrderSpecifier<?>... orders);
-
-    @Override
-    List<T> findAll(OrderSpecifier<?>... orders);
-}
+	/*
+	 * @Override List<T> findAll(Predicate predicate);
+	 * 
+	 * @Override List<T> findAll(Predicate predicate, Sort sort);
+	 * 
+	 * @Override List<T> findAll(Predicate predicate, OrderSpecifier<?>... orders);
+	 * 
+	 * @Override List<T> findAll(OrderSpecifier<?>... orders);
+	 */}
