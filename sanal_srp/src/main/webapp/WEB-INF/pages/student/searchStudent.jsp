@@ -20,7 +20,7 @@
 	border-color: #ebccd1;
 }
 </style> -->
-<script type="text/javascript">
+<!-- <script type="text/javascript">
  $(document).ready(function() {
 	  $("#javaScriptErrorMessage").hide();
 	  });
@@ -36,7 +36,7 @@
 	    } else return true;
 	 }
 
-	$("input[type=submit]").click(function(e)){
+	$("input[type=submit]").click(function(e){
 		debugger;
 		 var firstName = $("#FirstName").val();
 	     var lastName = $("#LastName").val();
@@ -51,7 +51,7 @@
 //$(document).on()	
  
  </script>
-</head>
+ --></head>
 <body>
 	<div class="container mt-3">
 		<form:form class="form-inline" method="post"
@@ -78,7 +78,8 @@
 					<form:input path="LastName" pattern="[A-Za-z ]{1,50}" size="10"
 						class="form-control mr-sm-2" placeholder="Last Name" />
 					<div class="input-group-append">
-						<button class="btn btn-success" type="submit">Search</button>
+						<input type="submit" value="Go" onclick="javascipt:validate()">
+						<!-- <button class="btn btn-success" type="submit">Search</button> -->
 					</div>
 					<!-- <input type="submit" value="Search" /> -->
 				</div>

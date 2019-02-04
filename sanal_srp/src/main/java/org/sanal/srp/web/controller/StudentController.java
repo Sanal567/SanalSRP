@@ -3,10 +3,16 @@
  */
 package org.sanal.srp.web.controller;
 
+import java.util.List;
+import java.util.Objects;
+
 import org.sanal.srp.entities.Student;
 import org.sanal.srp.repository.StudentRepository;
 import org.sanal.srp.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,6 +32,8 @@ import com.querydsl.core.types.Predicate;
 
 @Controller
 public class StudentController {
+
+	private static final String STUDENT_LIST_MODEL_NAME = "studentList";
 
 	@Autowired
 	private StudentService studentService;
@@ -57,10 +65,21 @@ public class StudentController {
 	@Autowired
 	private StudentRepository studentRepository;
 
+	@GetMapping("/student/searchPagination")
+	public String searchStudentsPagination(Model model, @RequestParam("pageNo") int pageNo, Pageable pageable) {
+		if (!Objects.isNull(pageNo)) {
+			pageable = PageRequest.of(pageNo, 5, Sort.by("firstName").ascending());
+			model.addAttribute(STUDENT_LIST_MODEL_NAME, studentRepository.findAllByCreatedBy(1, pageable));
+			model.addAttribute("student", new Student());
+			return "/student/searchResults";
+		} else
+			return "searchStudents";
+	}
+
 	@GetMapping("/student/search")
 	public String searchStudentsQueryDslWeb(Model model, @QuerydslPredicate(root = Student.class) Predicate predicate,
 			@RequestParam MultiValueMap<String, String> parameters) {
-		model.addAttribute("studentList", studentRepository.findAll(predicate));
+		model.addAttribute(STUDENT_LIST_MODEL_NAME, studentRepository.findAll(predicate));
 		return "searchResults";
 	}
 
@@ -70,7 +89,7 @@ public class StudentController {
 
 		if ((student.getFirstName() != null && student.getFirstName().trim().length() != 0)
 				|| (student.getLastName() != null && student.getLastName().trim().length() != 0)) {
-			searchResults.addObject("studentList", studentService.searchStudentsQueryDsl(student));
+			searchResults.addObject(STUDENT_LIST_MODEL_NAME, studentService.searchStudentsQueryDsl(student));
 			searchResults.setViewName("/student/searchResults");
 			searchResults.addObject("firstName", student.getFirstName());
 			searchResults.addObject("lastName", student.getLastName());
