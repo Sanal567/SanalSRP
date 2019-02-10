@@ -4,7 +4,10 @@ import java.util.Properties;
 
 import javax.sql.DataSource;
 
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -22,8 +25,11 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.view.InternalResourceViewResolver;
-import org.springframework.web.servlet.view.JstlView;
+import org.thymeleaf.extras.springsecurity5.dialect.SpringSecurityDialect;
+import org.thymeleaf.spring5.SpringTemplateEngine;
+import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
+import org.thymeleaf.spring5.view.ThymeleafViewResolver;
+import org.thymeleaf.templatemode.TemplateMode;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
@@ -48,8 +54,15 @@ import com.zaxxer.hikari.HikariDataSource;
 @PropertySource("classpath:/application.properties")
 @EnableJpaRepositories(basePackages = { "org.sanal.srp.repository" })
 @ComponentScan({ "org.sanal.srp.*" })
-@Import({ SecurityConfig.class })
-public class AppConfig implements WebMvcConfigurer/* extends WebMvcConfigurerAdapter */ {
+@Import({ SpringSecurityConfig.class })
+public class AppConfig implements WebMvcConfigurer, ApplicationContextAware/* extends WebMvcConfigurerAdapter */ {
+
+	private ApplicationContext applicationContext;
+
+	@Override
+	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+		this.applicationContext = applicationContext;
+	}
 
 	@Autowired
 	private Environment environment;
@@ -105,8 +118,7 @@ public class AppConfig implements WebMvcConfigurer/* extends WebMvcConfigurerAda
 		jpaProperties.put("hibernate.show_sql", environment.getProperty("hibernate.show_sql"));
 		// Specifies the action that is invoked to the database when the Hibernate
 		// SessionFactory is created or closed.
-		// jpaProperties.put("hibernate.hbm2ddl.auto",
-		// environment.getProperty("hibernate.hbm2ddl.auto"));
+		jpaProperties.put("hibernate.hbm2ddl.auto", environment.getProperty("hibernate.hbm2ddl.auto"));
 		// Configures the naming strategy that is used when Hibernate creates
 		// new database objects and schema elements
 		jpaProperties.put("hibernate.implicit_naming_strategy",
@@ -167,6 +179,69 @@ public class AppConfig implements WebMvcConfigurer/* extends WebMvcConfigurerAda
 		return transactionManager;
 	}
 
+	/* **************************************************************** */
+	/* THYMELEAF-SPECIFIC ARTIFACTS */
+	/* TemplateResolver <- TemplateEngine <- ViewResolver */
+	/* **************************************************************** */
+
+	public SpringResourceTemplateResolver templateResolver() {
+		// SpringResourceTemplateResolver automatically integrates with Spring's own
+		// resource resolution infrastructure, which is highly recommended.
+		SpringResourceTemplateResolver templateResolver = new SpringResourceTemplateResolver();
+		templateResolver.setApplicationContext(this.applicationContext);
+		templateResolver.setPrefix("/WEB-INF/templates/");
+		templateResolver.setSuffix(".html");
+		// HTML is the default value, added here for the sake of clarity.
+		templateResolver.setTemplateMode(TemplateMode.HTML);
+		// Template cache is true by default. Set to false if you want
+		// templates to be automatically updated when modified.
+		templateResolver.setCacheable(false);
+		return templateResolver;
+	}
+
+	@Bean
+	public SpringTemplateEngine templateEngine() {
+		// SpringTemplateEngine automatically applies SpringStandardDialect and
+		// enables Spring's own MessageSource message resolution mechanisms.
+		SpringTemplateEngine templateEngine = new SpringTemplateEngine();
+		// Enabling the SpringEL compiler with Spring 4.2.4 or newer can
+		// speed up execution in most scenarios, but might be incompatible
+		// with specific cases when expressions in one template are reused
+		// across different data types, so this flag is "false" by default
+		// for safer backwards compatibility.
+		templateEngine.setEnableSpringELCompiler(true); // Compiled SpringEL should speed up executions
+		templateEngine.setTemplateResolver(templateResolver());
+		templateEngine.addDialect(new SpringSecurityDialect());
+		return templateEngine;
+	}
+
+	@Bean
+	public ThymeleafViewResolver viewResolver() {
+		ThymeleafViewResolver viewResolver = new ThymeleafViewResolver();
+		viewResolver.setTemplateEngine(templateEngine());
+		// NOTE 'order' and 'viewNames' are optional
+		// viewResolver.setOrder(1);
+		// viewResolver.setViewNames(new String[] {".html", ".xhtml"});
+		return viewResolver;
+	}
+
+//	@Bean
+//	public InternalResourceViewResolver viewResolver() {
+//		InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
+//		viewResolver.setViewClass(JstlView.class);
+//		viewResolver.setPrefix("/WEB-INF/pages/");
+//		viewResolver.setSuffix(".jsp");
+//		return viewResolver;
+//	}
+
+	/* ******************************************************************* */
+	/* Defines callback methods to customize the Java-based configuration */
+	/* for Spring MVC enabled via {@code @EnableWebMvc} */
+	/* ******************************************************************* */
+
+	/**
+	 * Dispatcher configuration for serving static resources
+	 */
 	@Override
 	public void addResourceHandlers(final ResourceHandlerRegistry registry) {
 		registry.addResourceHandler("/images/**/*").addResourceLocations("/resources/images/");
@@ -174,21 +249,15 @@ public class AppConfig implements WebMvcConfigurer/* extends WebMvcConfigurerAda
 		registry.addResourceHandler("/css/**").addResourceLocations("/resources/css/");
 	}
 
+	/**
+	 * Message externalization/internationalization
+	 */
 	@Bean
 	public MessageSource messageSource() {
 		ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
 		messageSource.setBasename("message");
 		messageSource.setDefaultEncoding("UTF-8");
 		return messageSource;
-	}
-
-	@Bean
-	public InternalResourceViewResolver viewResolver() {
-		InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
-		viewResolver.setViewClass(JstlView.class);
-		viewResolver.setPrefix("/WEB-INF/pages/");
-		viewResolver.setSuffix(".jsp");
-		return viewResolver;
 	}
 
 	/*

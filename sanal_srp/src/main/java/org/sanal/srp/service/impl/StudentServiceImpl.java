@@ -8,7 +8,6 @@ import java.util.Optional;
 
 import org.sanal.srp.entities.QStudent;
 import org.sanal.srp.entities.Student;
-import org.sanal.srp.repository.BaseRepository;
 import org.sanal.srp.repository.StudentRepository;
 import org.sanal.srp.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;

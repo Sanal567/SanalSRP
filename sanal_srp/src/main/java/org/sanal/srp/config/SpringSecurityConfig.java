@@ -17,7 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(jsr250Enabled = true)
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private DataSource dataSource;
@@ -27,35 +27,47 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		return new BCryptPasswordEncoder();
 	}
 
+	@Override
 	@Autowired
-	public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
-
+	protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
 		auth.jdbcAuthentication().dataSource(dataSource)
 				.usersByUsernameQuery("SELECT username, password, enabled FROM sanal.users WHERE username=?")
 				.authoritiesByUsernameQuery("SELECT username, role FROM sanal.user_roles WHERE username=?");
+
 	}
 
 	@Override
 	public void configure(WebSecurity web) throws Exception {
-		web.ignoring().antMatchers("/lib/**", "/images/**", "/open/**", "/global/**", "/fonts/**",
-		"/js/**", "/css/**");
+		web.ignoring().antMatchers("/lib/**", "/images/**", "/open/**", "/global/**", "/fonts/**", "/js/**", "/css/**");
 	}
 
 	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-
-		http.authorizeRequests().antMatchers("/resources/**", "/signup", "/about").permitAll()
-				.antMatchers("/db/**").access("hasRole('ADMIN') and hasRole('DBA')")
-				.antMatchers("/admin/**").hasRole("ADMIN")
-				.anyRequest().authenticated()
-			.and()
-				.formLogin().loginPage("/login").permitAll().failureUrl("/login?error")
-				.usernameParameter("username").passwordParameter("password")
-			.and()
-				.logout().logoutSuccessUrl("/login?logout")
-				.deleteCookies("JSESSIONID").invalidateHttpSession(true)
-			.and()
-				.exceptionHandling().accessDeniedPage("/403")
-			.and().csrf();
+	protected void configure(final HttpSecurity http) throws Exception {
+//		.loginPage("/login").permitAll()
+// 		.failureUrl("/login?error")
+//		.logoutSuccessUrl("/login?logout")		
+//		.accessDeniedPage("/403")
+	
+		http
+					.authorizeRequests()
+					.antMatchers("/resources/**", "/signup", "/about").permitAll()
+					.antMatchers("/db/**").access("hasRole('ADMIN') and hasRole('DBA')")
+					.antMatchers("/admin/**").hasRole("ADMIN")
+					.anyRequest().authenticated()
+			 .and()
+			 		.formLogin()
+			 		.loginPage("/login.html").permitAll()
+			 		.failureUrl("/login-error.html?error")
+			 		.usernameParameter("username").passwordParameter("password")
+			 .and()
+			 		.logout()
+			 		.logoutSuccessUrl("/index.html?logout")
+			 		.deleteCookies("JSESSIONID")
+			 		.invalidateHttpSession(true)
+			 .and()
+			 		.exceptionHandling()
+			 		.accessDeniedPage("/403.html")
+			 .and()
+			 		.csrf();
 	}
 }

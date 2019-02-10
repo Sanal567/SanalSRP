@@ -2,7 +2,6 @@ package org.sanal.srp.web.controller;
 
 import java.sql.Date;
 
-import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 
 import org.sanal.srp.entities.Address;

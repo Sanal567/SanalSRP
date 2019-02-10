@@ -1,14 +1,21 @@
+
 /**
  * License of software
+ *
+ *
  */
+
 package org.sanal.srp.web.controller;
 
-import java.util.List;
 import java.util.Objects;
+
+import javax.inject.Inject;
 
 import org.sanal.srp.entities.Student;
 import org.sanal.srp.repository.StudentRepository;
 import org.sanal.srp.service.StudentService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -26,32 +33,31 @@ import org.springframework.web.servlet.ModelAndView;
 import com.querydsl.core.types.Predicate;
 
 /**
- * @author Nalluru Sunil Reddy
+ * @author Sunil Nalluru
  *
  */
 
 @Controller
 public class StudentController {
 
-	private static final String STUDENT_LIST_MODEL_NAME = "studentList";
+	private final Logger logger = LoggerFactory.getLogger(StudentController.class);
+	private final String STUDENT_LIST_MODEL_NAME = "studentList";
 
-	@Autowired
+	@Inject
 	private StudentService studentService;
+	@Inject
+	private StudentRepository studentRepository;
 
 	@GetMapping("/student/viewStudentDetails")
-	public ModelAndView showStudentDetails(@RequestParam("studentId") Integer studentId) {
-
-		ModelAndView studentDetails = new ModelAndView();
-		try {
-			if (studentId.toString().length() != 0) {
-				studentDetails.addObject("student", studentService.findById(studentId));
-			} else {
-				System.out.println("studentId is empty string");
-			}
-		} catch (NullPointerException nullPointerException) {
-			System.out.println("..........");
+	public String showStudentDetails(Model studentDetails, @RequestParam("studentId") Integer studentId) {
+		if (studentId != null) {
+			studentDetails.addAttribute("student", studentService.findById(studentId));
+			return "studentDetails";
+		} else {
+			logger.debug("studentId is empty string");
+			return " ";
 		}
-		return studentDetails;
+
 	}
 
 	@GetMapping("/student/searchStudent")
@@ -61,9 +67,6 @@ public class StudentController {
 		// searchStudent.addV
 		return searchStudent;
 	}
-
-	@Autowired
-	private StudentRepository studentRepository;
 
 	@GetMapping("/student/searchPagination")
 	public String searchStudentsPagination(Model model, @RequestParam("pageNo") int pageNo, Pageable pageable) {
@@ -79,8 +82,13 @@ public class StudentController {
 	@GetMapping("/student/search")
 	public String searchStudentsQueryDslWeb(Model model, @QuerydslPredicate(root = Student.class) Predicate predicate,
 			@RequestParam MultiValueMap<String, String> parameters) {
-		model.addAttribute(STUDENT_LIST_MODEL_NAME, studentRepository.findAll(predicate));
-		return "searchResults";
+		if (parameters.size() > 0) {
+			model.addAttribute(STUDENT_LIST_MODEL_NAME, studentRepository.findAll(predicate));
+			return "searchResults";
+		} else {
+			model.addAttribute("error", "Please enter at least one field");
+			return "searchStudents";
+		}
 	}
 
 	@PostMapping("/student/searchStudent")
@@ -94,7 +102,7 @@ public class StudentController {
 			searchResults.addObject("firstName", student.getFirstName());
 			searchResults.addObject("lastName", student.getLastName());
 		} else {
-			searchResults.addObject("error", "Please enter at least one field");
+			searchResults.addObject("error", "Please fill at least one field");
 			searchResults.setViewName("/student/searchStudent");
 		}
 		return searchResults;
