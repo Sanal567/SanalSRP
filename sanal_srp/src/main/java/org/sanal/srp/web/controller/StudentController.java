@@ -16,7 +16,6 @@ import org.sanal.srp.repository.StudentRepository;
 import org.sanal.srp.service.StudentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -48,24 +47,24 @@ public class StudentController {
 	@Inject
 	private StudentRepository studentRepository;
 
-	@GetMapping("/student/viewStudentDetails")
+	@GetMapping("/student/viewStudentDetails.html")
 	public String showStudentDetails(Model studentDetails, @RequestParam("studentId") Integer studentId) {
 		if (studentId != null) {
+			//studentId has to be positive value
 			studentDetails.addAttribute("student", studentService.findById(studentId));
 			return "studentDetails";
 		} else {
 			logger.debug("studentId is empty string");
-			return " ";
+			return "";
 		}
 
 	}
 
 	@GetMapping("/student/searchStudent")
-	public ModelAndView showSearchForm() {
-		ModelAndView searchStudent = new ModelAndView();
-		searchStudent.addObject("student", new Student());
+	public String showSearchForm(Model model) {
+		model.addAttribute("student", new Student());
 		// searchStudent.addV
-		return searchStudent;
+		return "/student/searchStudent";
 	}
 
 	@GetMapping("/student/searchPagination")

@@ -12,6 +12,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Description;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.ResourceBundleMessageSource;
@@ -184,6 +185,8 @@ public class AppConfig implements WebMvcConfigurer, ApplicationContextAware/* ex
 	/* TemplateResolver <- TemplateEngine <- ViewResolver */
 	/* **************************************************************** */
 
+	@Description("Thymeleaf Template Resolver")
+	@Bean
 	public SpringResourceTemplateResolver templateResolver() {
 		// SpringResourceTemplateResolver automatically integrates with Spring's own
 		// resource resolution infrastructure, which is highly recommended.
