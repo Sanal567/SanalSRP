@@ -47,7 +47,7 @@ public class StudentController {
 	@Inject
 	private StudentRepository studentRepository;
 
-	@GetMapping("/student/viewStudentDetails.html")
+	@GetMapping("/student/viewStudentDetails")
 	public String showStudentDetails(Model studentDetails, @RequestParam("studentId") Integer studentId) {
 		if (studentId != null) {
 			//studentId has to be positive value
