@@ -62,10 +62,19 @@ public class StudentServiceImpl implements StudentService {
 	 */
 	@Override
 	public List<Student> searchStudentsQueryDsl(Student student) {
-		BooleanExpression booleanExpression = QStudent.student.firstName.containsIgnoreCase(student.getFirstName())
-				.and(QStudent.student.lastName.containsIgnoreCase(student.getLastName()));
-	//	baseRepository.findAll(booleanExpression);
-		return  (List<Student>) studentRepository.findAll(booleanExpression);
+		String firstName = student.getFirstName();
+		String lastName = student.getLastName();
+
+		if ((firstName != null && firstName.trim().length() != 0)
+				&& (lastName != null && lastName.trim().length() != 0)) {
+			BooleanExpression booleanExpression = QStudent.student.firstName.containsIgnoreCase(student.getFirstName())
+					.or(QStudent.student.lastName.containsIgnoreCase(student.getLastName()));
+			return (List<Student>) studentRepository.findAll(booleanExpression);
+		} else if (firstName != null && firstName.trim().length() != 0)
+			return studentRepository.findByFirstNameIgnoreCaseContainingOrderByFirstNameAsc(firstName);
+		else
+			return studentRepository.findByLastNameIgnoreCaseContainingOrderByLastNameAsc(lastName);
+
 	}
 
 }

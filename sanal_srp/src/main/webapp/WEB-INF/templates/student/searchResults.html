@@ -1,17 +1,26 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-
-<c:set var="contextPath" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html>
-<html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<!-- <c:set var="contextPath" value="${pageContext.request.contextPath}" /> -->
+
 <head>
 <meta charset="ISO-8859-1">
 <title>Search results</title>
 </head>
+
 <body>
 	Search Results
-	<br />
-	<c:choose>
+	<table>
+		<tbody>
+			<tr th:each="student: ${studentList}">
+			<td>100</td>
+				<td th:text="${student.firstName}" />
+				<td th:text="${student.lastName}" />
+			</tr>
+		</tbody>
+	</table>
+
+	<!-- 	<c:choose>
 		<c:when test="${studentList.size()>0}">
 			<c:set var="results" value="true" />
 			<c:forEach var="student" items="${studentList}">
@@ -21,13 +30,18 @@
 			</c:forEach>
 		</c:when>
 		<c:otherwise>
-			<c:set var="results" value="false" />
-		No student found for
+ -->
+	<!--	<c:set var="results" value="false" /> -->
+	No student found for first name :<span th:text ="${firstName}"></span>
+	last name : <span th:text = "${lastName}"></span>
+	<!--
 				<c:if test="${firstName != '' and firstName != null}">First Name : ${firstName}</c:if>
 			<c:if test="${lastName ne '' and lastName ne null}">Last Name : ${lastName}</c:if>
 		</c:otherwise>
 	</c:choose>
+-->
 	<br />
+	<!--
 	<c:choose>
 		<c:when test="${results eq 'false' }">
 			<br />
@@ -52,12 +66,14 @@
 							<div class="input-group-append">
 								<button class="btn btn-success" type="submit">Search</button>
 							</div>
-							<!-- <input type="submit" value="Search" /> -->
+							 <input type="submit" value="Search" /> 
 						</div>
 					</fieldset>
 				</form:form>
 			</div>
 		</c:when>
 	</c:choose>
+-->
 </body>
+
 </html>
