@@ -57,9 +57,6 @@ public class StudentServiceImpl implements StudentService {
 		return s;
 	}
 
-	/*
-	 * @Autowired private BaseRepository baseRepository;
-	 */
 	@Override
 	public List<Student> searchStudentsQueryDsl(Student student) {
 		String firstName = student.getFirstName();

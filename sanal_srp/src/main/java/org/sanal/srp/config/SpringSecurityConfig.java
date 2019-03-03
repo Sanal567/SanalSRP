@@ -33,7 +33,6 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 		auth.jdbcAuthentication().dataSource(dataSource)
 				.usersByUsernameQuery("SELECT username, password, enabled FROM sanal.users WHERE username=?")
 				.authoritiesByUsernameQuery("SELECT username, role FROM sanal.user_roles WHERE username=?");
-
 	}
 
 	@Override
@@ -51,22 +50,23 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 		http
 					.authorizeRequests()
 					.antMatchers("/resources/**", "/signup", "/about").permitAll()
-					.antMatchers("/db/**").access("hasRole('ADMIN') and hasRole('DBA')")
+					.antMatchers("/db/**").access("hasRole('ADMIN') or hasRole('DBA')")
 					.antMatchers("/admin/**").hasRole("ADMIN")
 					.anyRequest().authenticated()
 			 .and()
 			 		.formLogin()
-			 		.loginPage("/login.html").permitAll()
-			 		.failureUrl("/login-error.html?error")
+			 		.loginPage("/login").permitAll()
+			 		.failureUrl("/login?error")
 			 		.usernameParameter("username").passwordParameter("password")
 			 .and()
-			 		.logout()
-			 		.logoutSuccessUrl("/index.html?logout")
+			 		.logout().permitAll()
+			 		.logoutUrl("/logout") 
+			 		.logoutSuccessUrl("/login?logout")
 			 		.deleteCookies("JSESSIONID")
 			 		.invalidateHttpSession(true)
 			 .and()
 			 		.exceptionHandling()
-			 		.accessDeniedPage("/403.html")
+			 		.accessDeniedPage("/403")
 			 .and()
 			 		.csrf();
 	}

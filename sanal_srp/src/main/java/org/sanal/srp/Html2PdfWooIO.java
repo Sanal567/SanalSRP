@@ -3,13 +3,6 @@
  */
 package org.sanal.srp;
 
-import java.io.IOException;
-import java.io.InputStream;
-
-import io.woo.htmltopdf.HtmlToPdf;
-import io.woo.htmltopdf.HtmlToPdfException;
-import io.woo.htmltopdf.HtmlToPdfObject;
-
 /**
  * @author sanal567
  *
@@ -49,8 +42,8 @@ public class Html2PdfWooIO {
 //			    .convert("/Users/sanal567/file.pdf");
 
 	
-	boolean success = HtmlToPdf.create()
-		    .object(HtmlToPdfObject.forUrl("https://github.com/wooio/htmltopdf-java"))
-		    .convert("/Users/sanal567/file2.pdf");
+//	boolean success = HtmlToPdf.create()
+//		    .object(HtmlToPdfObject.forUrl("https://github.com/wooio/htmltopdf-java"))
+//		    .convert("/Users/sanal567/file2.pdf");
 	}
 }
