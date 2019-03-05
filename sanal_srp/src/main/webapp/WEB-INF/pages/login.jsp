@@ -19,15 +19,20 @@
 </head>
 
 <body onload='document.loginForm.username.focus();'>
-	<div class="container">
-		<div align="center">
-			<h2>Sanal SRP</h2>
+	<div class="jumbotron text-center" style="margin-bottom: 0;">
+		<h1 style="color: green;">Sanal SRP</h1>
+		<p>Services And Resources Planning</p>
+	</div>
 
+	<div class="container">
+
+		<div align="center">
 			<c:if test="${not empty error}">
-				<div class="error">${error}</div>
+				<div class="alert alert-danger">${error}</div>
 			</c:if>
+
 			<c:if test="${not empty msg}">
-				<div class="msg">${msg}</div>
+				<div class="alert alert-success">${msg}</div>
 			</c:if>
 
 			<form name='loginForm' method="post"
@@ -41,7 +46,7 @@
 						</div>
 						<div class="col" align="left">
 							<input type="text" class="form-control" id="username"
-								name="username" placeholder="Enter your Username">
+								name="username" placeholder="Enter your Username" />
 						</div>
 
 					</div>
@@ -51,7 +56,10 @@
 						</div>
 						<div class="col" align="left">
 							<input type="password" class="form-control" id="password"
-								name="password" placeholder="Enter password">
+								name="password" placeholder="Enter password" />
+							<!-- An element to toggle between password visibility -->
+							<input type="checkbox" onclick="showPasswordToggle()">Show
+							Password
 						</div>
 					</div>
 
@@ -67,6 +75,7 @@
 					<div class="row">
 						<div class="col">
 							<button type="submit" class="btn btn-primary">Submit</button>
+							<a href="#">Forgot password</a>
 						</div>
 					</div>
 
@@ -77,6 +86,17 @@
 			</form>
 		</div>
 	</div>
+	<%@include file="footer.jsp"%>
+	<script>
+		function showPasswordToggle() {
+			var x = document.getElementById("password");
+			if (x.type === "password") {
+				x.type = "text";
+			} else {
+				x.type = "password";
+			}
+		}
+	</script>
 
 	<!-- <style>
 .error {

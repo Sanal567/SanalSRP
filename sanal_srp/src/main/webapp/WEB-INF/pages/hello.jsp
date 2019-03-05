@@ -1,17 +1,18 @@
-<%@taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
+<%@taglib prefix="sec"
+	uri="http://www.springframework.org/security/tags"%>
 
 <html>
 <head>
-<%@include file="bootstrap_files.jsp" %>
-<title>User Home</title>
+<%@include file="bootstrap_files.jsp"%>
+<title>Home</title>
 </head>
 
 <body>
 	<h1>Title : ${title}</h1>
 	<h1>Message : ${message}</h1>
 
-	<sec:authorize access="hasAnyRole('ROLE_USER')">
-	User Home
+${pageContext.request.userPrincipal.name}
+	<sec:authorize access="hasAnyRole('ROLE_USER', 'ROLE_ADMIN')">
 		<!-- For login user -->
 		<c:if test="${pageContext.request.userPrincipal.name != null}">
 			<a href="${contextPath}/admission/admit">Admissions</a>

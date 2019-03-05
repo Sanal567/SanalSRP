@@ -3,7 +3,7 @@
 <%@include file="../bootstrap_files.jsp"%>
 <%-- <link rel="stylesheet" href="${contextPath}/css/srp_core.css" /> --%>
 <head>
-<title>Search Student</title>
+<title>Search student</title>
 
 <script type="text/javascript">
 	function validate() {
@@ -15,11 +15,9 @@
 		if ((firstName.trim().length == 0) && (lastName.trim().length == 0)) {
 			a = false;
 
-			$("#javaScriptErrorMessage").addClass(
-					"alert alert-danger");
+			$("#javaScriptErrorMessage").addClass("alert alert-danger");
 			$("#javaScriptErrorMessage")
-					.html(
-							"Please enter at least one field");
+					.html("Please enter at least one field");
 			$("#javaScriptErrorMessage").show();
 		}
 		return a;
@@ -33,9 +31,11 @@
 </head>
 
 <body>
-	<div class="container mt-3" align="center">
+	<!-- <div class="container mt-3"> -->
+	<%@include file="../header.jsp"%>
+	<div class="container">
 		<fieldset>
-			<legend>Search students</legend>
+			<legend>Search student</legend>
 
 			<c:if test="${not empty error}">
 				<div class="alert alert-danger alert-dismissible fade show">
@@ -60,5 +60,6 @@
 			</form:form>
 		</fieldset>
 	</div>
+	<%@include file="../footer.jsp"%>
 </body>
 </html>
