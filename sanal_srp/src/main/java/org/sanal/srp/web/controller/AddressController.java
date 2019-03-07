@@ -27,15 +27,14 @@ public class AddressController {
 
 	@GetMapping("/address/editAddress")
 	public String editAddress(Model editAddress, @RequestParam("addressId") Integer addressId) {
+
 		editAddress.addAttribute("address", addressService.getAddress(addressId));
 		return "/address/editAddress";
 	}
 
-//	@Autowired
-//	private AddessValidator addressValidator;  
-
 	@PostMapping("/address/saveAddress")
 	public String saveAddress(Model model, @ModelAttribute("address") Address address) {
+		
 		address = addressService.saveAddress(address);
 		model.addAttribute("address", address);
 		return "savedAddress";
@@ -43,9 +42,11 @@ public class AddressController {
 
 	@PostMapping("/address/updateAddress")
 	public String updateAddress(Model model, @Valid Address address, BindingResult bindingResult) {
+		
 		if (bindingResult.hasErrors()) {
 			return "/address/editAddress";
 		} else {
+
 			address.setLastUpdatedBy(0);
 			address.setLastUpdationDate(new Date(System.currentTimeMillis()));
 			address = addressService.updateAddress(address);

@@ -8,20 +8,23 @@
 </head>
 
 <body>
-	<h1>Title : ${title}</h1>
-	<h1>Message : ${message}</h1>
+	<%@include file="header.jsp"%>
 
-${pageContext.request.userPrincipal.name}
+
+	${pageContext.request.userPrincipal} Welcome :
+	${pageContext.request.userPrincipal.name}
 	<sec:authorize access="hasAnyRole('ROLE_USER', 'ROLE_ADMIN')">
 		<!-- For login user -->
 		<c:if test="${pageContext.request.userPrincipal.name != null}">
-			<a href="${contextPath}/admission/admit">Admissions</a>
 			<h2>
 				User : ${pageContext.request.userPrincipal.name} | <a
 					href="javascript:formSubmit()"> Logout</a>
 			</h2>
 		</c:if>
 	</sec:authorize>
+
+
+	<a href="${contextPath}/admission/admit">Admissions</a>
 
 </body>
 

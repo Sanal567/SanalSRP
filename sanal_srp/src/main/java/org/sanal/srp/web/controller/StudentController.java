@@ -7,8 +7,6 @@
 
 package org.sanal.srp.web.controller;
 
-import java.util.Objects;
-
 import javax.inject.Inject;
 
 import org.sanal.srp.entities.Student;
@@ -27,7 +25,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.querydsl.core.types.Predicate;
 
@@ -41,6 +38,7 @@ public class StudentController {
 
 	private final Logger logger = LoggerFactory.getLogger(StudentController.class);
 	private final String STUDENT_LIST_MODEL_NAME = "studentList";
+	private final String STUDENT_SHOW_SEARCH_FORM = "/student/showSearchStudentsForm";
 
 	@Inject
 	private StudentService studentService;
@@ -50,17 +48,18 @@ public class StudentController {
 	@GetMapping("/student/viewStudentDetails")
 	public String showStudentDetails(Model studentDetails, @RequestParam("studentId") Integer studentId) {
 		if (studentId != null) {
-			//studentId has to be positive value
+			// studentId has to be positive value
 			studentDetails.addAttribute("student", studentService.findById(studentId));
 			return "studentDetails";
 		} else {
-			logger.debug("studentId is empty string");
-			return "";
+			logger.debug("studentId is empty");
+			studentDetails.addAttribute("error", "Invalid URL ");
+			return "home";
 		}
 
 	}
 
-	@GetMapping("/student/searchStudent")
+	@GetMapping(STUDENT_SHOW_SEARCH_FORM)
 	public String showSearchForm(Model model) {
 		model.addAttribute("student", new Student());
 		// searchStudent.addV
@@ -68,8 +67,8 @@ public class StudentController {
 	}
 
 	@GetMapping("/student/searchPagination")
-	public String searchStudentsPagination(Model model, @RequestParam("pageNo") int pageNo, Pageable pageable) {
-		if (!Objects.isNull(pageNo)) {
+	public String searchStudentsPagination(Model model, @RequestParam("pageNo") Integer pageNo, Pageable pageable) {
+		if (pageNo != null) {
 			pageable = PageRequest.of(pageNo, 5, Sort.by("firstName").ascending());
 			model.addAttribute(STUDENT_LIST_MODEL_NAME, studentRepository.findAllByCreatedBy(1, pageable));
 			model.addAttribute("student", new Student());
@@ -78,7 +77,7 @@ public class StudentController {
 			return "searchStudents";
 	}
 
-	@GetMapping("/student/search")
+	@GetMapping("/student/searchQueryDsl")
 	public String searchStudentsQueryDslWeb(Model model, @QuerydslPredicate(root = Student.class) Predicate predicate,
 			@RequestParam MultiValueMap<String, String> parameters) {
 		if (parameters.size() > 0) {
@@ -90,21 +89,19 @@ public class StudentController {
 		}
 	}
 
-	@PostMapping("/student/searchStudent")
-	public ModelAndView searchResults(@ModelAttribute("student") Student student) {
-		ModelAndView searchResults = new ModelAndView();
+	@GetMapping("/student/searchStudents")
+	public String searchResults(@ModelAttribute("student") Student student, Model searchResults) {
 
 		if ((student.getFirstName() != null && student.getFirstName().trim().length() != 0)
 				|| (student.getLastName() != null && student.getLastName().trim().length() != 0)) {
-			searchResults.addObject(STUDENT_LIST_MODEL_NAME, studentService.searchStudentsQueryDsl(student));
-			searchResults.setViewName("/student/searchResults");
-			searchResults.addObject("firstName", student.getFirstName());
-			searchResults.addObject("lastName", student.getLastName());
+			searchResults.addAttribute(STUDENT_LIST_MODEL_NAME, studentService.searchStudentsQueryDsl(student));
+			searchResults.addAttribute("firstName", student.getFirstName());
+			searchResults.addAttribute("lastName", student.getLastName());
+			return "/student/searchResults";
 		} else {
-			searchResults.addObject("error", "Please fill at least one field");
-			searchResults.setViewName("/student/searchStudent");
+			searchResults.addAttribute("error", "Please enter at least one field");
+			return STUDENT_SHOW_SEARCH_FORM;
 		}
-		return searchResults;
 	}
 
 }
